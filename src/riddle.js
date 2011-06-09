@@ -468,7 +468,7 @@
     this.forEach(function(elem) {
       var id = getNodeId(elem),
           bounds = event ? findBoundsByEvent(listeners[id], event) : listeners[id];
-      bounds.forEach(function(bound) {
+      bounds.length > 0 && bounds.forEach(function(bound) {
         delete bounds[bound.index];
         elem.removeEventListener(bound.event, bound.callback, false);
       });
