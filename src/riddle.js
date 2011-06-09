@@ -467,10 +467,10 @@
   function unbind(event) {
     this.forEach(function(elem) {
       var id = getNodeId(elem),
-          bounds = listeners[id];
-      (event ? findBoundsByEvent(bounds, event) : bounds).forEach(function(bound) {
+          bounds = event ? findBoundsByEvent(listeners[id], event) : listeners[id];
+      bounds.forEach(function(bound) {
         delete bounds[bound.index];
-        elem.removeEventListener(event, bound.callback, false);
+        elem.removeEventListener(bound.event, bound.callback, false);
       });
     });
   }

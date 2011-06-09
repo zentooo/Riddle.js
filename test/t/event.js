@@ -55,11 +55,55 @@ test("r.fn.unbind", function() {
   });
 });
 
+test("r.fn.unbind should unbind given event handler only", function() {
+  var button = r("#button3"),
+      clickSpy = sinon.spy(function() { alert("hoge"); }),
+      focusSpy = sinon.spy(function() {});
+      blurSpy = sinon.spy(function() {});
+
+  button.bind("click", clickSpy);
+  button.bind("focus", focusSpy);
+  button.bind("blur", blurSpy);
+
+  // unbind other than blur
+  button.unbind("click");
+  button.unbind("focus");
+
+  emit(button, "click");
+  emit(button, "focus");
+  emit(button, "blur");
+
+  ok( ! clickSpy.called, "click emitted but callback function not called");
+  ok( ! focusSpy.called, "focus emitted but callback function not called");
+  ok( blurSpy.called, "blur emitted but callback function not called");
+});
+
+test("r.fn.unbind for all", function() {
+  var button = r("#button4"),
+      clickSpy = sinon.spy(function() { alert("hoge"); }),
+      focusSpy = sinon.spy(function() {});
+      blurSpy = sinon.spy(function() {});
+
+  button.bind("click", clickSpy);
+  button.bind("focus", focusSpy);
+  button.bind("blur", blurSpy);
+
+  // unbind all
+  button.unbind();
+
+  emit(button, "click");
+  emit(button, "focus");
+  emit(button, "blur");
+
+  ok( ! clickSpy.called, "click emitted but callback function not called");
+  ok( ! focusSpy.called, "focus emitted but callback function not called");
+  ok( ! blurSpy.called, "blur emitted but callback function not called");
+});
 
 // test for shofthand methods
 
 test("r.fn.[\"eventName\"]", function() {
-  var button = r("#button3");
+  var button = r("#button5");
 
   events.forEach(function(event) {
     testShortCut(button, event);
