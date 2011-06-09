@@ -1,4 +1,3 @@
-#closure_command = "closure --compilation_level ADVANCED_OPTIMIZATIONS "
 closure_command = "closure "
 jsfiles = Dir.glob("./src/*.js").reject { |f| f =~ /min/ }
 

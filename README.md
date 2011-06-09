@@ -20,8 +20,8 @@ Riddle.js is not:
 -------
 
 * to do all for you
-* willing to kick you to library lock-in
-* for people who like to dream eternally in comfortable DSL
+* take you to library lock-in
+* for people who like dreaming in ever-lasting DSL
 
 
 Features
@@ -42,7 +42,6 @@ More
 
 * Riddle uses selector backend for document.querySelectorAll. document.querySelectorAll is flxible DOM interface but not so fast. So please use r.id or r.cls if you want the speed. They uses more specialized functions like document.getElementById and document.getElementsByClassName internally.
 * To extend selector result, add function to r.fn. Get access the results with "this".
-* Riddle caches all DOM query results currently. This feature might be change in the future.
 
 
 Included Plugins
@@ -50,11 +49,3 @@ Included Plugins
 
 * storage.js ( Simple wrapper for localStorage and sessionStorage )
 * touch.js ( Currently supports swipeLeft and swipeRight only )
-
-
-FNAQ ( Frequently but Never Asked Questions )
--------
-
-* Why Riddle doesn't support method chain? -> Because that is nothing.
-* Why Riddle doesn't give me target element as "this" for event handlers? -> I'm just thinking about it.
-* I want "foobar" feature. -> Give me message or pull request. I'll implement or merge if reasonable.
