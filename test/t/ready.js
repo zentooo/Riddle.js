@@ -16,6 +16,7 @@ test("r with String -> select and wrap", function() {
   is( lis.length, 3, "returns 3 items");
 
   var none = r("table");
+  console.dir(none);
   ok( Array.isArray(none), "wrapped Object is a subtype of Array" );
   is( none.__proto__, r.fn, "__proto__ of wrapped Object is r.fn" );
   is( none.length, 0, "returns empty Array with no result set" );
