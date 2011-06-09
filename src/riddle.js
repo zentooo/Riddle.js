@@ -208,6 +208,7 @@
         });
       }
     }
+    return this;
   }
 
 /**
@@ -220,7 +221,8 @@
  * r("#mami .head").remove();
  */
   function remove() {
-    return wrap(this.map(function(elem) { return elem.parentNode.removeChild(elem); }));
+    this.forEach(function(elem) { elem.parentNode.removeChild(elem); });
+    return this;
   }
 
 /**
@@ -264,6 +266,7 @@
         add[pos](elem, item);
       });
     }
+    return this;
   }
 
   add.prev = addPrev;
@@ -334,6 +337,7 @@
         }
       });
     }
+    return this;
   }
 
 /**
@@ -385,6 +389,7 @@
         elem.style.cssText += ";" + cssPair(key);
       });
     }
+    return this;
   }
 
   function cssPair(param) {
@@ -406,6 +411,7 @@
     this.forEach(function(elem) {
       elem.className += " " + name;
     });
+    return this;
   }
 
 /**
@@ -420,6 +426,7 @@
     this.forEach(function(elem) {
       elem.className = elem.className.replace(regex, "");
     });
+    return this;
   }
 
 
@@ -453,6 +460,7 @@
       bounds.push( { event: event, callback: callback, index: bounds.length } );
       elem.addEventListener(event, callback, useCapture || false);
     });
+    return this;
   }
 
 /**
@@ -468,11 +476,12 @@
     this.forEach(function(elem) {
       var id = getNodeId(elem),
           bounds = event ? findBoundsByEvent(listeners[id], event) : listeners[id];
-      bounds.length > 0 && bounds.forEach(function(bound) {
+      bounds && bounds.forEach(function(bound) {
         delete bounds[bound.index];
         elem.removeEventListener(bound.event, bound.callback, false);
       });
     });
+    return this;
   }
 
 

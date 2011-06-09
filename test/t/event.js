@@ -45,6 +45,12 @@ test("r.fn.bind", function() {
   events.forEach(function(event) {
     testBind(button, event);
   });
+
+  button.bind("click", function(e) {
+    is ( this, e.target, "this === e.target");
+  });
+
+  emit(button, "click");
 });
 
 test("r.fn.unbind", function() {
