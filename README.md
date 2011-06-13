@@ -5,7 +5,7 @@ Riddle.js is simple and stupid selector-based JavaScript library mainly for iPho
 
 * riddle.js (15k) -> original Riddle.js source code, for development
 * riddle.min.js (4.1k) -> Riddle.js minified with Closure Compiler
-* riddle-all.min.js (5.5k) -> Riddle.js and all included plugins combined and minified
+* riddle-all.min.js (5.9k) -> Riddle.js and all included plugins combined and minified
 
 
 Riddle.js is:
@@ -49,3 +49,4 @@ Included Plugins
 
 * storage.js ( Simple wrapper for localStorage and sessionStorage )
 * touch.js ( Currently supports swipeLeft and swipeRight only )
+* animate.js ( transition-based animation support )
