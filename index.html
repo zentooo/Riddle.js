@@ -3,10 +3,10 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Tests for Riddle.js</title>
-  <link href='http://fonts.googleapis.com/css?family=Droid+Sans+Mono' rel='stylesheet' type='text/css' />
+  <link href='http://fonts.googleapis.com/css?family=Cabin+Sketch:bold' rel='stylesheet' type='text/css' />
   <style type="text/css">
     * {
-      font-family: 'Droid Sans Mono';
+      font-family: 'Cabin Sketch';
     }
     html {
       background: #090909;
@@ -15,14 +15,16 @@
       margin-top: 10%;
       margin-left: 10%;
     }
-    h1 {
+    h1, h2 {
       color: #0088cc;
+    }
+    h2 {
+      margin-top: 4%;
     }
     ul {
       margin: 0;
       padding: 0;
       list-style-type: none;
-      margin-top: 6%;
     }
     li {
       margin-bottom: 2.5%;
@@ -30,8 +32,6 @@
     a {
       font-size: 120%;
       color: #DDDDDD;
-      background: #1B1B1B;
-      border-radius: 0.3em;
       padding-right: 0.8%;
       padding-left: 0.5%;
       text-decoration: none;
@@ -41,6 +41,8 @@
 <body>
 
   <h1>Tests for Riddle.js</h1>
+
+  <h2>Core</h2>
 
   <ul>
     <li>
@@ -53,9 +55,6 @@
     	<a href="test/html/array.html">tests for Array++ features of r.fn</a>
     </li>
     <li>
-    	<a href="test/html/touch.html">tests for touch event functions of r.fn</a>
-    </li>
-    <li>
     	<a href="test/html/event.html">tests for event binding functions of r.fn</a>
     </li>
     <li>
@@ -66,6 +65,20 @@
     </li>
     <li>
     	<a href="test/html/others.html">tests for other features of Riddle</a>
+    </li>
+  </ul>
+
+  <h2>Plugins</h2>
+
+  <ul>
+    <li>
+      <a href="test/html/touch.html">tests for touch event bindings for r.fn</a>
+    </li>
+    <li>
+    	<a href="test/html/storage.html">tests for r.storage</a>
+    </li>
+    <li>
+    	<a href="test/html/animate.html">tests for r.fn.animate</a>
     </li>
   </ul>
 

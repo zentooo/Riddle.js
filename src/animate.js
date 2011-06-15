@@ -5,9 +5,9 @@
 
   // Can we stop (undo) animation with saving original css properties?
 
-  function animate(properties, duration, easing, callback) {
-    var dur = duration || 0.5,
-        ease = easing || "ease-in-out",
+  function animate(properties, options) {
+    var dur = options.duration || 0.5,
+        ease = options.easing || "ease-in-out",
         transNum,
         endCall = 0,
         cssParams = { "-webkit-transition": dur + "s " + ease };
@@ -20,13 +20,14 @@
       transNum = copy(properties, cssParams);
     }
 
-    if ( typeof callback === "function" ) {
+    if ( typeof options.callback === "function" ) {
+      var that = this;
       this.bind("webkitTransitionEnd", function(e) {
         ++endCall;
         if ( transNum === endCall ) {
-          callback(e);
+          options.callback(e);
+          that.unbind("webkitTransitionEnd");
         }
-        this.unbind("webkitTransitionEnd");
       });
     }
 
