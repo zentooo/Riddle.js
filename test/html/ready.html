@@ -9,7 +9,8 @@
       window.domLoaded = true;
     }, false);
   </script>
-	<script type="text/javascript" src="../../src/riddle.min.js"></script>
+	<!--<script type="text/javascript" src="../../src/riddle.min.js"></script>-->
+	<script type="text/javascript" src="../../src/riddle.js"></script>
 	<script type="text/javascript" src="../qunit/qunit.js"></script>
 	<script type="text/javascript" src="../t/ready.js"></script>
 </head>
@@ -24,6 +25,23 @@
     <li>item1</li>
     <li>item2</li>
     <li>item3</li>
-  <ul>
+  </ul>
+
+  <div class="parent">
+    <div class="child">parent1 - child1</div>
+  </div>
+
+  <div class="parent">
+    <div class="child">parent2 - child2</div>
+  </div>
+
+  <div class="parent">
+    <div class="not-child">parent3 - not child</div>
+  </div>
+
+  <div class="not-parent">
+    <div class="child">not-parent - child3</div>
+  </div>
+
 </body>
 </html>

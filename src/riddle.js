@@ -35,6 +35,10 @@
       if ( typeof second === "undefined" || second instanceof HTMLElement ) {
         return $(first, second);
       }
+      else if ( second.__proto__ === r.fn ) {
+        var selecteds = second.map(function(el) { return toArray.call(query(first, el)); });
+        return wrap(selecteds.reduce(function(all, cur) { return all.concat(cur); }, []));
+      }
     }
     else if ( first instanceof HTMLElement ) {
       return wrap(first);
