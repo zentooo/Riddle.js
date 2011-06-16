@@ -15,7 +15,7 @@
  * @namespace
  * @function
  * @param first {(string|function|HTMLElement)}
- * @param second {?HTMLElement}
+ * @param second {?(HTMLElement|NodeArray)}
  * @return {NodeArray} On Selector or wrapper usage
  * @example
  * var elementsById = r("#id");
