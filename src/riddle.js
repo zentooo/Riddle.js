@@ -607,7 +607,7 @@
   r.cls = cls;
   r.ajax = ajax;
 
-  r.version = "0.1.6";
+  r.version = "0.1.8";
 
   window.r = r;
 
