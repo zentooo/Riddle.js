@@ -95,6 +95,7 @@
     css: css,
     addClass: addClass,
     removeClass: removeClass,
+    hasClass: hasClass,
 
     // event
     bind: bind,
@@ -431,6 +432,24 @@
       elem.className = elem.className.replace(regex, "");
     });
     return this;
+  }
+
+/**
+ * return elements have that class or not
+ * @name hasClass
+ * @function
+ * @memberOf r.fn
+ * @param className {string}
+ * @return {(boolean|Array.<boolean>)}
+ */
+  function hasClass(name) {
+    var regex = new RegExp("(?:^|\\b)" + name + "(?:\\b|$)");
+    if ( this.length === 1 ) {
+      return !!this[0].className.match(regex);
+    }
+    else {
+      return this.map(function(el) { return !!el.className.match(regex); } );
+    }
   }
 
 
