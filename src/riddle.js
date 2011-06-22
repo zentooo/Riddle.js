@@ -274,26 +274,21 @@
     return this;
   }
 
-  add.prev = addPrev;
-  add.first = addFirst;
-  add.last = addLast;
-  add.next = addNext;
-
-  function addPrev(elem, text) {
+  add.prev = function(elem, text) {
     elem.insertAdjacentHTML("beforeBegin", text);
-  }
+  };
 
-  function addFirst(elem, text) {
+  add.first = function(elem, text) {
     elem.insertAdjacentHTML("afterBegin", text);
-  }
+  };
 
-  function addLast(elem, text) {
+  add.last = function(elem, text) {
     elem.insertAdjacentHTML("beforeEnd", text);
-  }
+  };
 
-  function addNext(elem, text) {
+  add.next = function(elem, text) {
     elem.insertAdjacentHTML("afterEnd", text);
-  }
+  };
 
 
 // attributes
@@ -453,7 +448,7 @@
   }
 
 
-  // event handling
+// event handling
 
   function getNodeId(elem) {
     return elem.nid || (elem.nid = nodeId++);
@@ -508,7 +503,7 @@
   }
 
 
-  // ajax
+// ajax
 
   function encode(obj) {
     var result = "?", set = [], key;
@@ -588,7 +583,7 @@
   }
 
 
-  // elements with cache
+// shorthand and fast query
 
 /**
  * select a element by id and wrap it as NodeArray
@@ -620,7 +615,8 @@
     return (context || doc).querySelectorAll(selector);
   }
 
-  // add public method to r
+
+// add public method to r
 
   r.id = id;
   r.cls = cls;
