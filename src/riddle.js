@@ -32,16 +32,10 @@
  */
   function r(first, second) {
     if ( typeof first === "string" ) {
-      if ( typeof second === "undefined" || second instanceof HTMLElement ) {
-        return $(first, second);
-      }
-      else if ( second.__proto__ === r.fn ) {
-        var selecteds = second.map(function(el) { return toArray.call(query(first, el)); });
-        return wrap(selecteds.reduce(function(all, cur) { return all.concat(cur); }, []));
-      }
+      return queryWithContext(first, second, "querySelectorAll");
     }
     else if ( first instanceof HTMLElement ) {
-      return wrap(first);
+      return wrap(elementAsArray(first));
     }
     else if ( typeof first === "function" ) {
       if ( domLoaded ) {
@@ -55,21 +49,26 @@
     }
   }
 
-  function $(selector, context) {
-    var ctxt = context || doc, nodeArray = toArray.call(query(selector, ctxt));
-    return wrap(nodeArray);
+  function queryWithContext(selector, context, functionName) {
+    if ( typeof context === "undefined" || context instanceof HTMLElement ) {
+      return wrap(elementAsArray((context || doc)[functionName](selector)));
+    }
+    else if ( context.__proto__ === r.fn ) {
+      var selecteds = context.map(function(el) { return elementAsArray(el[functionName](selector)); });
+      return wrap(selecteds.reduce(function(all, cur) { return all.concat(cur); }, []));
+    }
   }
 
-  function wrap(el) {
-    var ary = el;
-
+  function elementAsArray(el) {
     if ( el instanceof HTMLElement ) {
-      ary = [ary];
+      return [el];
     }
     else if ( typeof el.length === "number" && typeof el.item === "function" ) {
-      ary = toArray.call(ary);
+      return toArray.call(el);
     }
+  }
 
+  function wrap(ary) {
     ary.__proto__ = r.fn;
     return ary;
   }
@@ -595,7 +594,7 @@
  * @return NodeArray
  */
   function id(identifier, context) {
-    return wrap((context || doc).getElementById(identifier));
+    return queryWithContext(identifier, context, "getElementById");
   }
 
 /**
@@ -608,11 +607,7 @@
  * @return NodeArray
  */
   function cls(name, context) {
-    return wrap((context || doc).getElementsByClassName(name));
-  }
-
-  function query(selector, context) {
-    return (context || doc).querySelectorAll(selector);
+    return queryWithContext(name, context, "getElementsByClassName");
   }
 
 
@@ -622,7 +617,7 @@
   r.cls = cls;
   r.ajax = ajax;
 
-  r.version = "0.1.8";
+  r.version = "0.1.9";
 
   window.r = r;
 
