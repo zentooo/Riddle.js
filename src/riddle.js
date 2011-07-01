@@ -408,7 +408,7 @@
  */
   function addClass(name) {
     this.forEach(function(elem) {
-      elem.className += " " + name;
+      elem.className = elem.className.trim() + " " + name;
     });
     return this;
   }
