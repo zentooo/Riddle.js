@@ -61,11 +61,12 @@ test("r.fn.css with multiple elements", function() {
     is( display, "block", "display of li is block, next");
   });
 
-  lis.css( { "display": "inline", "color": "#ffffff" } );
+  lis.css( { "display": "inline", "color": "#ffffff", "font-size": "70px" } );
   lis.css("display").forEach(function(display) {
     is( display, "inline", "display of li inline now!");
   });
+  lis.css("color", "black");
   lis.css("color").forEach(function(color) {
-    is(color, "rgb(255, 255, 255)", "color of li is #ffffff!");
+    is(color, "rgb(0, 0, 0)", "color of li is #000000!");
   });
 });
