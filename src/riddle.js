@@ -363,8 +363,6 @@
  * r(".monster").css( { visibility: "visible", background-color: "red" } );
  */
   function css(first, second) {
-    var cssString = ";";
-
     if ( typeof first === "string" ) {
       if ( typeof second === "undefined" ) {
         if ( this.length === 1 ) {
@@ -377,18 +375,16 @@
         }
       }
       else {
-        cssString += first + ":" + second + ";";
         this.forEach(function(elem) {
-          elem.style.cssText += cssString;
+          elem.style.setProperty(first, second, "");
         });
       }
     }
     else if ( typeof first === "object" ) {
-      for ( var key in first ) {
-        cssString += key + ":" + first[key] + ";";
-      }
       this.forEach(function(elem) {
-        elem.style.cssText += cssString;
+        for ( var key in first ) {
+          elem.style.setProperty(key, first[key], "");
+        }
       });
     }
     return this;
