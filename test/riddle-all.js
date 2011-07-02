@@ -1,0 +1,1 @@
+../src/riddle-all.min.js
