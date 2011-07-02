@@ -303,8 +303,8 @@
  * @name attr
  * @function
  * @memberOf r.fn
- * @param name {(string|Object)}
- * @param value {?string}
+ * @param first {(string|Object)}
+ * @param second {?string}
  * @return {(string|Array.<string>)}
  * @example
  * var value = r("#age").attr("value");
@@ -315,24 +315,24 @@
  * @example
  * r(".links-change").attr( { href: "http://example.com", target: "_blank" } );
  */
-  function attr(name, value) {
-    if ( typeof name === "string" ) {
-      if ( typeof value === "undefined" ) {
+  function attr(first, second) {
+    if ( typeof first === "string" ) {
+      if ( typeof second === "undefined" ) {
         if ( this.length === 1 ) {
-          return this[0].getAttribute(name);
+          return this[0].getAttribute(first);
         }
         else {
-          return this.invoke("getAttribute", name);
+          return this.invoke("getAttribute", first);
         }
       }
       else {
-        this.invoke("setAttribute", name, String(value));
+        this.invoke("setAttribute", first, String(second));
       }
     }
-    else if ( typeof name === "object" ) {
+    else if ( typeof first === "object" ) {
       this.forEach(function(elem) {
-        for ( var k in name ) {
-          elem.setAttribute(k, String(name[k]));
+        for ( var k in first ) {
+          elem.setAttribute(k, String(first[k]));
         }
       });
     }
@@ -350,8 +350,8 @@
  * @name css
  * @function
  * @memberOf r.fn
- * @param key {(string|Object)}
- * @param value {?string}
+ * @param first {(string|Object)}
+ * @param second {?string}
  * @return {(string|Array.<string>)}
  * @example
  * var bodyHeight = r("body").css("height");
@@ -362,41 +362,32 @@
  * @example
  * r(".monster").css( { visibility: "visible", background-color: "red" } );
  */
-  function css(key, value) {
-    var param = {};
-
-    if ( typeof key === "string" ) {
-      if ( typeof value === "undefined" ) {
+  function css(first, second) {
+    if ( typeof first === "string" ) {
+      if ( typeof second === "undefined" ) {
         if ( this.length === 1 ) {
-          return getComputedStyle(this[0], "").getPropertyValue(key);
+          return getComputedStyle(this[0], "").getPropertyValue(first);
         }
         else {
           return this.map(function(elem) {
-            return getComputedStyle(elem, "").getPropertyValue(key);
+            return getComputedStyle(elem, "").getPropertyValue(first);
           });
         }
       }
       else {
-        param[key] = value;
         this.forEach(function(elem) {
-          elem.style.cssText += ";" + cssPair(param);
+          elem.style[first] = second;
         });
       }
     }
-    else if ( typeof key === "object" ) {
+    else if ( typeof first === "object" ) {
       this.forEach(function(elem) {
-        elem.style.cssText += ";" + cssPair(key);
+        for ( var key in first ) {
+          elem.style[key] = first[key];
+        }
       });
     }
     return this;
-  }
-
-  function cssPair(param) {
-    var css = "", key;
-    for ( key in param ) {
-      css += key + ":" + param[key] + ";";
-    }
-    return css;
   }
 
 /**
@@ -617,7 +608,7 @@
   r.cls = cls;
   r.ajax = ajax;
 
-  r.version = "0.1.9";
+  r.version = "0.2.0";
 
   window.r = r;
 
