@@ -383,14 +383,14 @@
 <span class='line'>376</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
 <span class='line'>377</span> </span><span class="WHIT">      </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>378</span> </span><span class="WHIT">        </span><span class="NAME">this.forEach</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">elem</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>379</span> </span><span class="WHIT">          </span><span class="NAME">elem.style</span><span class="PUNC">[</span><span class="NAME">first</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">second</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>379</span> </span><span class="WHIT">          </span><span class="NAME">elem.style.setProperty</span><span class="PUNC">(</span><span class="NAME">first</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">second</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>380</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>381</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
 <span class='line'>382</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
 <span class='line'>383</span> </span><span class="WHIT">    </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="WHIT"> </span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">first</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">"object"</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>384</span> </span><span class="WHIT">      </span><span class="NAME">this.forEach</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">elem</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>385</span> </span><span class="WHIT">        </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="WHIT"> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">key</span><span class="WHIT"> </span><span class="KEYW">in</span><span class="WHIT"> </span><span class="NAME">first</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>386</span> </span><span class="WHIT">          </span><span class="NAME">elem.style</span><span class="PUNC">[</span><span class="NAME">key</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">first</span><span class="PUNC">[</span><span class="NAME">key</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>386</span> </span><span class="WHIT">          </span><span class="NAME">elem.style.setProperty</span><span class="PUNC">(</span><span class="NAME">key</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">first</span><span class="PUNC">[</span><span class="NAME">key</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>387</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
 <span class='line'>388</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>389</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
@@ -608,16 +608,31 @@
 <span class='line'>601</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">queryWithContext</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">context</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"getElementsByClassName"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>602</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
 <span class='line'>603</span> 
-<span class='line'>604</span> 
-<span class='line'>605</span> </span><span class="COMM">// add public method to r</span><span class="WHIT">
-<span class='line'>606</span> 
-<span class='line'>607</span> </span><span class="WHIT">  </span><span class="NAME">r.id</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">id</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>608</span> </span><span class="WHIT">  </span><span class="NAME">r.cls</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">cls</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>609</span> </span><span class="WHIT">  </span><span class="NAME">r.ajax</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ajax</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>610</span> 
-<span class='line'>611</span> </span><span class="WHIT">  </span><span class="NAME">r.version</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"0.1.9"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>612</span> 
-<span class='line'>613</span> </span><span class="WHIT">  </span><span class="NAME">window.r</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">r</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>614</span> 
-<span class='line'>615</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">(</span><span class="NAME">document</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">Array.prototype.slice</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">encodeURIComponent</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>616</span> </span></pre></body></html>
+<span class='line'>604</span> </span><span class="COMM">/**
+<span class='line'>605</span>  * select elements by tag name and wrap it as NodeArray
+<span class='line'>606</span>  * @name tag
+<span class='line'>607</span>  * @function
+<span class='line'>608</span>  * @memberOf r
+<span class='line'>609</span>  * @param name {string}
+<span class='line'>610</span>  * @param context [HTMLElement]
+<span class='line'>611</span>  * @return NodeArray
+<span class='line'>612</span>  */</span><span class="WHIT">
+<span class='line'>613</span> </span><span class="WHIT">  </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">tag</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">context</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>614</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">queryWithContext</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">context</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"getElementsByTagName"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>615</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>616</span> 
+<span class='line'>617</span> 
+<span class='line'>618</span> </span><span class="COMM">// add public method to r</span><span class="WHIT">
+<span class='line'>619</span> 
+<span class='line'>620</span> </span><span class="WHIT">  </span><span class="NAME">r.id</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">id</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>621</span> </span><span class="WHIT">  </span><span class="NAME">r.cls</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">cls</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>622</span> </span><span class="WHIT">  </span><span class="NAME">r.tag</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">tag</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>623</span> 
+<span class='line'>624</span> </span><span class="WHIT">  </span><span class="NAME">r.ajax</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ajax</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>625</span> 
+<span class='line'>626</span> </span><span class="WHIT">  </span><span class="NAME">r.version</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"0.2.1"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>627</span> 
+<span class='line'>628</span> </span><span class="WHIT">  </span><span class="NAME">window.r</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">r</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>629</span> 
+<span class='line'>630</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">(</span><span class="NAME">document</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">Array.prototype.slice</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">encodeURIComponent</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>631</span> </span></pre></body></html>

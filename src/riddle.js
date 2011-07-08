@@ -601,14 +601,29 @@
     return queryWithContext(name, context, "getElementsByClassName");
   }
 
+/**
+ * select elements by tag name and wrap it as NodeArray
+ * @name tag
+ * @function
+ * @memberOf r
+ * @param name {string}
+ * @param context [HTMLElement]
+ * @return NodeArray
+ */
+  function tag(name, context) {
+    return queryWithContext(name, context, "getElementsByTagName");
+  }
+
 
 // add public method to r
 
   r.id = id;
   r.cls = cls;
+  r.tag = tag;
+
   r.ajax = ajax;
 
-  r.version = "0.2.0";
+  r.version = "0.2.1";
 
   window.r = r;
 

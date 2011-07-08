@@ -23,6 +23,15 @@ test("r.cls", function() {
   });
 });
 
+test("r.tag", function() {
+  var lis = r.tag("li");
+  is ( lis.__proto__, r.fn, "__proto__ of wrapped object is r.fn" );
+
+  lis.forEach(function(li) {
+    ok ( li instanceof HTMLLIElement, "all items of wrapped object is HTMLLIElement" );
+  });
+});
+
 test("r.fn.addClass", function() {
   var none = r("#div1");
   none.addClass("red");
