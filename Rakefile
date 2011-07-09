@@ -3,8 +3,8 @@ plugins = Dir.glob("./src/*.js").reject { |f| f =~ /riddle|min/ }
 jsfiles = ["./src/riddle.js"].concat(plugins)
 jsdoc_path = ENV["HOME"] + "/Dropbox/jsdoc-toolkit"
 
-task :default => [:build, :build_all, :doc, :show]
-task :min => [:build, :build_all]
+task :default => [:doc, :min, :show]
+task :min => [:build, :build_all, :show]
 
 task :build do
   sh closure_command + "--js ./src/riddle.js > ./src/riddle.min.js"

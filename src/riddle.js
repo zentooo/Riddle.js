@@ -91,6 +91,7 @@
 
     // attribute
     attr: attr,
+    removeAttr: removeAttr,
     css: css,
     addClass: addClass,
     removeClass: removeClass,
@@ -336,6 +337,35 @@
         }
       });
     }
+    return this;
+  }
+
+/**
+ * <p> Remove attribute(s) of elements </p>
+ * <ul>
+ * <li> removeAttr(name): remove an attribute for all elements
+ * <li> removeAttr(array): remove attributes for all elements
+ * <ul/>
+ * @name removeAttr
+ * @function
+ * @memberOf r.fn
+ * @param names {(string|Array.<string>)}
+ * @return {(string|Array.<string>)}
+ * @example
+ * r("#next").removeAttr("a");
+ * @example
+ * r(#next").removeAttr(["a", "target"]);
+ */
+  function removeAttr(name) {
+    var names = name;
+    if ( typeof names === "string" ) {
+      names = [names];
+    }
+    this.forEach(function(elem) {
+      names.forEach(function(name) {
+        elem.removeAttribute(name);
+      });
+    });
     return this;
   }
 
@@ -623,7 +653,7 @@
 
   r.ajax = ajax;
 
-  r.version = "0.2.1";
+  r.version = "0.2.2";
 
   window.r = r;
 

@@ -1,6 +1,7 @@
 module("test for attribute accessor function of selector results");
 
 is = strictEqual;
+isnt = notStrictEqual;
 
 test("r.fn.attr with one element", function() {
   var list = r("#list0");
@@ -68,5 +69,38 @@ test("r.fn.css with multiple elements", function() {
   lis.css("color", "black");
   lis.css("color").forEach(function(color) {
     is(color, "rgb(0, 0, 0)", "color of li is #000000!");
+  });
+});
+
+
+test("r.fn.removeAttr with string", function() {
+  var anchors = r("#list4 li a");
+  anchors.attr("href").forEach(function(href) {
+    is( href, "foo.html", "anchors have href attribute" );
+  });
+
+  anchors.removeAttr("href");
+
+  anchors.attr("href").forEach(function(href) {
+    is( href, null, "anchors lost href attribute" );
+  });
+  anchors.attr("onclick").forEach(function(onclick) {
+    isnt( onclick, null, "anchors did not lose onclick attribute" );
+  });
+});
+
+test("r.fn.removeAttr with Array.<string>", function() {
+  var anchors = r("#list5 li a");
+  anchors.attr("href").forEach(function(href) {
+    is( href, "foo.html", "anchors have href attribute" );
+  });
+
+  anchors.removeAttr(["href", "onclick"]);
+
+  anchors.attr("href").forEach(function(href) {
+    is( href, null, "anchors lost href attribute" );
+  });
+  anchors.attr("onclick").forEach(function(onclick) {
+    is( onclick, null, "anchors lost onclick attribute" );
   });
 });
