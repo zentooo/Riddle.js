@@ -28,3 +28,14 @@ test("r.fn.pluck", function() {
     start++;
   });
 });
+
+test("r.fn.each", function() {
+  var options = r("#select3 option");
+
+  options.each(function(item) {
+    is ( item.__proto__, r.fn, "proto of item is r.fn" );
+    is ( item.attr("value"), '1', "attr works" );
+    item.addClass("hoge");
+    is ( item.hasClass("hoge"), true, "addClass and hasClass works" );
+  });
+});

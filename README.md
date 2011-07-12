@@ -3,9 +3,9 @@ Riddle.js
 
 Riddle.js is simple and stupid selector-based JavaScript library mainly for iPhone and Android devices ( currently alpha-quality )
 
-* riddle.js (16k) -> original Riddle.js source code, for development
+* riddle.js (17k) -> original Riddle.js source code, for development
 * riddle.min.js (4.6k) -> Riddle.js minified with Closure Compiler
-* riddle-all.min.js (6.4k) -> Riddle.js and all included plugins combined and minified
+* riddle-all.min.js (6.5k) -> Riddle.js and all included plugins combined and minified
 
 
 Riddle.js is:

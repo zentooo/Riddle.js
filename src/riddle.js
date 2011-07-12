@@ -83,6 +83,7 @@
     detect: detect,
     invoke: invoke,
     pluck: pluck,
+    each: each,
 
     // DOM
     html: html,
@@ -158,6 +159,19 @@
  */
   function pluck(key) {
     return this.map(function(item) { return item[key]; });
+  }
+
+/**
+ * iterate with auto-wrapping
+ * @name each
+ * @function
+ * @memberOf r.fn
+ * @param f {function}
+ * @example
+ * var values = r("select#fruits option").each(function(wrapepd) { wrapped.css("color", "red"); });
+ */
+  function each(f) {
+    return this.forEach(function(el) { f(wrap(elementAsArray(el))); });
   }
 
 
@@ -653,7 +667,7 @@
 
   r.ajax = ajax;
 
-  r.version = "0.2.2";
+  r.version = "0.2.3";
 
   window.r = r;
 
