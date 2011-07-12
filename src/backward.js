@@ -1,3 +1,4 @@
+// for old Androids < 1.6
 (function(ap) {
   if ( typeof ap.reduce !== "function" ) {
     ap.reduce = reduce;
