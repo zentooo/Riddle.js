@@ -1,4 +1,4 @@
-// for old Androids < 1.6
+// for old Androids <= 1.6
 (function(ap, sp) {
 
   if ( typeof ap.reduce !== "function" ) {
@@ -23,6 +23,7 @@
   if ( typeof sp.trim !== "function" ) {
     sp.trim = trim;
   }
+
   function trim() {
     return this.replace(/(^\s+)|(\s+$)/g, "");
   }
