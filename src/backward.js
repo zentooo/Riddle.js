@@ -1,8 +1,10 @@
 // for old Androids < 1.6
-(function(ap) {
+(function(ap, sp) {
+
   if ( typeof ap.reduce !== "function" ) {
     ap.reduce = reduce;
   }
+
   function reduce(iterator, initial) {
     var sum = initial;
     if ( typeof iterator !== "function" ) {
@@ -16,4 +18,13 @@
     });
     return sum;
   }
-})(Array.prototype);
+
+
+  if ( typeof sp.trim !== "function" ) {
+    sp.trim = trim;
+  }
+  function trim() {
+    return this.replace(/(^\s+)|(\s+$)/g, "");
+  }
+
+})(Array.prototype, String.prototype);
