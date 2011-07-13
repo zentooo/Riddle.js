@@ -1,5 +1,7 @@
 // for old Androids <= 1.6
-(function(ap, sp) {
+(function(global, ap, sp) {
+
+  // for Array.prototype
 
   if ( typeof ap.reduce !== "function" ) {
     ap.reduce = reduce;
@@ -20,6 +22,8 @@
   }
 
 
+  // for String.prototype
+
   if ( typeof sp.trim !== "function" ) {
     sp.trim = trim;
   }
@@ -28,4 +32,17 @@
     return this.replace(/(^\s+)|(\s+$)/g, "");
   }
 
-})(Array.prototype, String.prototype);
+
+  // for JSON
+
+  if ( typeof global.JSON !== "object" ) {
+    global.JSON = {};
+    global.JSON.parse = parse;
+  }
+
+  // WARNING: Should be used with *only* trusted JSON string.
+  function parse(trustedJson) {
+    return eval("(" + trustedJson + ")");
+  }
+
+})(window, Array.prototype, String.prototype);
