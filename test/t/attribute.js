@@ -44,6 +44,8 @@ test("r.fn.css with one element", function() {
 
   list.css("visibility", "hidden");
   is( list.css("visibility"), "hidden", "visibility changed as hidden");
+  list.css("visibility", null);
+  is( list.css("visibility"), "visible", "visibility changed to default value");
 
   list.css( { "visibility": "visible", "color": "#ffffff" } );
   is( list.css("visibility"), "visible", "visibility get back to visible");
@@ -70,16 +72,21 @@ test("r.fn.css with multiple elements", function() {
   lis.css("color").forEach(function(color) {
     is(color, "rgb(0, 0, 0)", "color of li is #000000!");
   });
+
+  lis.css( { "display": null, "font-size": null } );
+  lis.css("display").forEach(function(display) {
+    is( display, "list-item", "display of li come back to default");
+  });
 });
 
 
-test("r.fn.removeAttr with string", function() {
+test("r.fn.attr (remove) with string", function() {
   var anchors = r("#list4 li a");
   anchors.attr("href").forEach(function(href) {
     is( href, "foo.html", "anchors have href attribute" );
   });
 
-  anchors.removeAttr("href");
+  anchors.attr("href", null);
 
   anchors.attr("href").forEach(function(href) {
     is( href, null, "anchors lost href attribute" );
@@ -89,13 +96,13 @@ test("r.fn.removeAttr with string", function() {
   });
 });
 
-test("r.fn.removeAttr with Array.<string>", function() {
+test("r.fn.attr (remove) with Array.<string>", function() {
   var anchors = r("#list5 li a");
   anchors.attr("href").forEach(function(href) {
     is( href, "foo.html", "anchors have href attribute" );
   });
 
-  anchors.removeAttr(["href", "onclick"]);
+  anchors.attr( { "href": null,  "onclick": null } );
 
   anchors.attr("href").forEach(function(href) {
     is( href, null, "anchors lost href attribute" );

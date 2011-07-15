@@ -92,7 +92,6 @@
 
     // attribute
     attr: attr,
-    removeAttr: removeAttr,
     css: css,
     addClass: addClass,
     removeClass: removeClass,
@@ -312,8 +311,8 @@
  * <ul>
  * <li> attr(name): returns attribute: String if selector has just one element
  * <li> attr(name): returns attributes: Array[String] if selector has more than two elements
- * <li> attr(name, value): set value to element's attribute
- * <li> attr(hash): set values to element's attribute
+ * <li> attr(name, value): set value to element's attribute. Remove attribute if value === null
+ * <li> attr(hash): set values to element's attribute. Remove attribute if hash.value === null
  * <ul/>
  * @name attr
  * @function
@@ -328,7 +327,11 @@
  * @example
  * r(".links-change").attr("href", "http://example.com");
  * @example
+ * r(".links-change").attr("href", null);
+ * @example
  * r(".links-change").attr( { href: "http://example.com", target: "_blank" } );
+ * @example
+ * r(".links-change").attr( { href: null } );
  */
   function attr(first, second) {
     if ( typeof first === "string" ) {
@@ -341,45 +344,26 @@
         }
       }
       else {
-        this.invoke("setAttribute", first, String(second));
+        if ( second === null ) {
+          this.invoke("removeAttribute", first);
+        }
+        else {
+          this.invoke("setAttribute", first, String(second));
+        }
       }
     }
     else if ( typeof first === "object" ) {
       this.forEach(function(elem) {
         for ( var k in first ) {
-          elem.setAttribute(k, String(first[k]));
+          if ( first[k] === null ) {
+            elem.removeAttribute(k);
+          }
+          else {
+            elem.setAttribute(k, String(first[k]));
+          }
         }
       });
     }
-    return this;
-  }
-
-/**
- * <p> Remove attribute(s) of elements </p>
- * <ul>
- * <li> removeAttr(name): remove an attribute for all elements
- * <li> removeAttr(array): remove attributes for all elements
- * <ul/>
- * @name removeAttr
- * @function
- * @memberOf r.fn
- * @param names {(string|Array.<string>)}
- * @return {(string|Array.<string>)}
- * @example
- * r("#next").removeAttr("a");
- * @example
- * r(#next").removeAttr(["a", "target"]);
- */
-  function removeAttr(name) {
-    var names = name;
-    if ( typeof names === "string" ) {
-      names = [names];
-    }
-    this.forEach(function(elem) {
-      names.forEach(function(name) {
-        elem.removeAttribute(name);
-      });
-    });
     return this;
   }
 
@@ -388,8 +372,8 @@
  * <ul>
  * <li> css(key): returns css style value: String if selector has just one element
  * <li> css(key): returns css style values: Array[String] if selector has more than two elements
- * <li> css(key, value): set css style value
- * <li> css(hash): set css style values
+ * <li> css(key, value): set css style value. Remove css attribute if value === null
+ * <li> css(hash): set css style values. Remove css attribute if hash.value === null
  * <ul/>
  * @name css
  * @function
@@ -404,7 +388,11 @@
  * @example
  * r("#hyde").css("height", "156px");
  * @example
+ * r("#hyde").css("height", null);
+ * @example
  * r(".monster").css( { visibility: "visible", background-color: "red" } );
+ * @example
+ * r(".monster").css( { visibility: null } );
  */
   function css(first, second) {
     if ( typeof first === "string" ) {
@@ -419,15 +407,27 @@
         }
       }
       else {
-        this.forEach(function(elem) {
-          elem.style.setProperty(first, second, "");
-        });
+        if ( second === null ) {
+          this.forEach(function(elem) {
+            elem.style.removeProperty(first);
+          });
+        }
+        else {
+          this.forEach(function(elem) {
+            elem.style.setProperty(first, second, "");
+          });
+        }
       }
     }
     else if ( typeof first === "object" ) {
       this.forEach(function(elem) {
         for ( var key in first ) {
-          elem.style.setProperty(key, first[key], "");
+          if ( first[key] === null ) {
+            elem.style.removeProperty(key);
+          }
+          else {
+            elem.style.setProperty(key, first[key], "");
+          }
         }
       });
     }
@@ -667,7 +667,7 @@
 
   r.ajax = ajax;
 
-  r.version = "0.2.3";
+  r.version = "0.2.4";
 
   window.r = r;
 

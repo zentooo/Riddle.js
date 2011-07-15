@@ -287,9 +287,7 @@ ul.inheritsList
 <ul>
 <li> attr(name): returns attribute: String if selector has just one element
 <li> attr(name): returns attributes: Array[String] if selector has more than two elements
-<li> attr(name, value): set value to element's attribute
-<li> attr(hash): set values to element's attribute
-<ul/></div>
+<li> attr(name, value): set value to element's attribute.</div>
 							</td>
 						</tr>
 					
@@ -311,9 +309,7 @@ ul.inheritsList
 <ul>
 <li> css(key): returns css style value: String if selector has just one element
 <li> css(key): returns css style values: Array[String] if selector has more than two elements
-<li> css(key, value): set css style value
-<li> css(hash): set css style values
-<ul/></div>
+<li> css(key, value): set css style value.</div>
 							</td>
 						</tr>
 					
@@ -384,19 +380,6 @@ ul.inheritsList
 								<div class="fixedFont">r.fn.<b><a href="../symbols/r.fn.html#.remove">remove</a></b>()
 								</div>
 								<div class="description">Remove elements from document tree</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">r.fn.<b><a href="../symbols/r.fn.html#.removeAttr">removeAttr</a></b>(names)
-								</div>
-								<div class="description"><p> Remove attribute(s) of elements </p>
-<ul>
-<li> removeAttr(name): remove an attribute for all elements
-<li> removeAttr(array): remove attributes for all elements
-<ul/></div>
 							</td>
 						</tr>
 					
@@ -568,8 +551,8 @@ see http://msdn.microsoft.com/ja-jp/library/cc428075.aspx or http://ejohn.org/bl
 <ul>
 <li> attr(name): returns attribute: String if selector has just one element
 <li> attr(name): returns attributes: Array[String] if selector has more than two elements
-<li> attr(name, value): set value to element's attribute
-<li> attr(hash): set values to element's attribute
+<li> attr(name, value): set value to element's attribute. Remove attribute if value === null
+<li> attr(hash): set values to element's attribute. Remove attribute if hash.value === null
 <ul/>
 						
 						
@@ -583,7 +566,11 @@ see http://msdn.microsoft.com/ja-jp/library/cc428075.aspx or http://ejohn.org/bl
 					
 					<pre class="code">r(".links-change").attr("href", "http://example.com");</pre>
 					
+					<pre class="code">r(".links-change").attr("href", null);</pre>
+					
 					<pre class="code">r(".links-change").attr( { href: "http://example.com", target: "_blank" } );</pre>
+					
+					<pre class="code">r(".links-change").attr( { href: null } );</pre>
 					
 					
 					
@@ -687,8 +674,8 @@ see http://msdn.microsoft.com/ja-jp/library/cc428075.aspx or http://ejohn.org/bl
 <ul>
 <li> css(key): returns css style value: String if selector has just one element
 <li> css(key): returns css style values: Array[String] if selector has more than two elements
-<li> css(key, value): set css style value
-<li> css(hash): set css style values
+<li> css(key, value): set css style value. Remove css attribute if value === null
+<li> css(hash): set css style values. Remove css attribute if hash.value === null
 <ul/>
 						
 						
@@ -702,7 +689,11 @@ see http://msdn.microsoft.com/ja-jp/library/cc428075.aspx or http://ejohn.org/bl
 					
 					<pre class="code">r("#hyde").css("height", "156px");</pre>
 					
+					<pre class="code">r("#hyde").css("height", null);</pre>
+					
 					<pre class="code">r(".monster").css( { visibility: "visible", background-color: "red" } );</pre>
+					
+					<pre class="code">r(".monster").css( { visibility: null } );</pre>
 					
 					
 					
@@ -1058,59 +1049,6 @@ see http://msdn.microsoft.com/ja-jp/library/cc428075.aspx or http://ejohn.org/bl
 
 					<hr />
 				
-					<a name=".removeAttr"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					<span class="light">{(string|Array.<string>)}</span>
-					<span class="light">r.fn.</span><b>removeAttr</b>(names)
-					
-					</div>
-					<div class="description">
-						<p> Remove attribute(s) of elements </p>
-<ul>
-<li> removeAttr(name): remove an attribute for all elements
-<li> removeAttr(array): remove attributes for all elements
-<ul/>
-						
-						
-					</div>
-					
-					
-					
-					<pre class="code">r("#next").removeAttr("a");</pre>
-					
-					<pre class="code">r(#next").removeAttr(["a", "target"]);</pre>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>names</b>
-									
-								</dt>
-								<dd>{(string|Array.<string>)}</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{(string|Array.<string>)}</span> </dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
 					<a name=".removeClass"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
@@ -1199,7 +1137,7 @@ see http://msdn.microsoft.com/ja-jp/library/cc428075.aspx or http://ejohn.org/bl
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Tue Jul 12 2011 10:47:54 GMT+0900 (JST)
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Fri Jul 15 2011 17:32:05 GMT+0900 (JST)
 		</div>
 	</body>
 </html>
