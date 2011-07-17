@@ -49,4 +49,6 @@ Included Plugins
 
 * storage.js ( Simple wrapper for localStorage and sessionStorage )
 * touch.js ( Currently supports swipeLeft and swipeRight only )
+* loader.js ( simple script loader with callback )
 * animate.js ( transition-based animation support )
+* backward.js ( for old browsers like Android =< 1.6 )
