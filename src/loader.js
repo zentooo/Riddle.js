@@ -11,16 +11,11 @@
         script.removeAttribute("onload");
 
         if ( ++current === all ) {
-          global.r.load = load;
           callback();
         }
       };
       head.appendChild(script);
     });
-  }
-
-  if ( typeof global.r !== "function" ) {
-    global.r = {};
   }
 
   global.r.load = load;
