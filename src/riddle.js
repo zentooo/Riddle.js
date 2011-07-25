@@ -83,13 +83,15 @@
   }
 
   function elementAsArray(el) {
-    if ( el instanceof HTMLElement ) {
+    if ( !!el ) {
+      return [];
+    }
+    else if ( el instanceof HTMLElement ) {
       return [el];
     }
     else if ( typeof el.length === "number" && typeof el.item === "function" ) {
       return toArray.call(el);
     }
-    return [];
   }
 
   function wrap(ary) {
