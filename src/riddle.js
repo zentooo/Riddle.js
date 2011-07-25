@@ -89,6 +89,7 @@
     else if ( typeof el.length === "number" && typeof el.item === "function" ) {
       return toArray.call(el);
     }
+    return [];
   }
 
   function wrap(ary) {
