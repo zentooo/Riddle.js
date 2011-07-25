@@ -61,7 +61,7 @@
   }
 
   function elementAsArray(el) {
-    if ( !!el ) {
+    if ( el === null ) {
       return [];
     }
     else if ( el instanceof HTMLElement ) {
