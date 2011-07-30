@@ -55,12 +55,15 @@
             return wrap(elementAsArray((context || doc)[functionName](selector)));
         }
         else if ( context.__proto__ === r.fn ) {
-            var selecteds = context.map(function(el) {
+            var result = [];
+            context.map(function(el) {
                 return elementAsArray(el[functionName](selector));
+            }).forEach(function(array) {
+                array.forEach(function(el) {
+                    result.push(el);
+                });
             });
-            return wrap(selecteds.reduce(function(all, cur) {
-                return all.concat(cur);
-            }, []));
+            return wrap(result);
         }
     }
 
@@ -471,7 +474,7 @@
     */
     function addClass(name) {
         this.forEach(function(elem) {
-            elem.className = elem.className.trim() + " " + name;
+            ( elem.className === "" ) ? elem.className = name : elem.className += " " + name;
         });
         return this;
     }
@@ -486,7 +489,8 @@
     function removeClass(name) {
         var regex = new RegExp("(?:^|\\b)" + name + "(?:\\b|$)\\s?", "g");
         this.forEach(function(elem) {
-            elem.className = elem.className.replace(regex, "");
+            var replaced = elem.className.replace(regex, "");
+            elem.className = replaced.replace(/\s+$/, "");
         });
         return this;
     }
@@ -699,7 +703,7 @@
 
     r.ajax = ajax;
 
-    r.version = "0.2.4";
+    r.version = "0.2.5";
 
     window.r = r;
 

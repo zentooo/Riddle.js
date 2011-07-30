@@ -1,17 +1,6 @@
 module("test for DOM manipulation function");
 
 
-// outerHTML for Firefox, inspired by http://d.hatena.ne.jp/amachang/20100531/1275270877
-
-if ( ! ('outerHTML' in document.createElement('div')) ) {
-  Object.defineProperty(HTMLElement.prototype, "outerHTML", {
-    get: function() {
-      return this.ownerDocument.createElement("div").appendChild(this.cloneNode(true)).parentNode.innerHTML;
-    }
-  });
-}
-
-
 is = strictEqual;
 
 test("r.fn.html - get", function() {
