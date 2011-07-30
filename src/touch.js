@@ -2,7 +2,7 @@ r(function() {
 
     var body = document.body,
         moveThreshold = 30,
-        touchEvents = ["tap", "swipeleft", "swiperight", "swipeup", "swipedown"],
+        touchEvents = ["swipeleft", "swiperight", "swipeup", "swipedown"],
         touch = { x1: 0, x2: 0, y1: 0, y2: 0, target: null };
 
     function trigger(elem, event) {
@@ -44,9 +44,6 @@ r(function() {
             else {
                 trigger(touch.target, "swiperight");
             }
-        }
-        else {
-            trigger(touch.target, "tap");
         }
 
         touch = { x1: 0, x2: 0, y1: 0, y2: 0, target: null };

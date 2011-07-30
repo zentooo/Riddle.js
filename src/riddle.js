@@ -2,8 +2,8 @@
 (function(doc, toArray, enc) {
 
     var listeners = {}, nodeId = 1,
-    events = ["click", "submit", "focus", "blur", "scroll", "select", "change"],
-    domLoaded = false;
+        events = ["click", "submit", "focus", "blur", "scroll", "select", "change"],
+        domLoaded = false;
 
     /**
      * <p> Select HTMLElements, wait DOMContentLoaded or wrap HTMLElement with r.fn <br /> Usages are:

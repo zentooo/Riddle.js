@@ -18,60 +18,40 @@ asyncTest("animate default", function() {
   });
 });
 
-//asyncTest("animate with duration", function() {
+asyncTest("animate with duration", function() {
 
-  //var green = r("#green");
-  //var before = Date.now();
+  var green = r("#green");
+  var before = Date.now();
 
-  //green.animate({
-    //"width": "100px",
-    //"height": "100px",
-    //"opacity": 0.5
-  //}, {
-    //duration: 2,
-    //callback: function() {
-      //ok( Date.now() - before > 1900, "fire after at least 1900 msec after");
-      //is( green.css("opacity"), "0.5", "opacity changes to 0.5");
-      //start();
-    //}
-  //});
-//});
+  green.animate({
+    "width": "100px",
+    "height": "100px",
+    "opacity": 0.5
+  }, {
+    duration: 2,
+    callback: function() {
+      ok( Date.now() - before > 1900, "fire after at least 1900 msec after");
+      is( green.css("opacity"), "0.5", "opacity changes to 0.5");
+      start();
+    }
+  });
+});
 
-//asyncTest("animation callback should be called just once", function() {
+asyncTest("animation callback should be called just once", function() {
 
-  //var spy = sinon.spy(function() {
-    //start();
-    //ok ( spy.calledOnce, "callback called just once" );
-  //});
+  var spy = sinon.spy(function() {
+    start();
+    ok ( spy.calledOnce, "callback called just once" );
+  });
 
-  //r("#blue").animate({
-    //"width": "100px",
-    //"height": "100px"
-  //}, {
-    //callback: spy
-  //});
+  r("#blue").animate({
+    "width": "100px",
+    "height": "100px"
+  }, {
+    callback: spy
+  });
 
-//});
-
-//asyncTest("r.fn.slideDown", function() {
-
-  //var spy = sinon.spy(function() {
-    //ok ( spy.calledOnce, "callback called just once" );
-    //start();
-  //});
-
-  //r("#yellow").slideDown( { callback: spy, duration: 2 } );
-//});
-
-//asyncTest("r.fn.slideUp", function() {
-
-  //var spy = sinon.spy(function() {
-    //ok ( spy.calledOnce, "callback called just once" );
-    //start();
-  //});
-
-  //r("#cyan").slideUp( { callback: spy, duration: 2 } );
-//});
+});
 
 asyncTest("r.fn.fadeIn", function() {
 
@@ -97,7 +77,7 @@ asyncTest("r.fn.fadeOut", function() {
 asyncTest("r.fn.scale", function() {
   var black = r("#black");
 
-  black.scale("0.8, 1.0", {
+  black.scale(0.8, 1.0, {
     duration: 1,
     callback: function() {
       ok(true);
@@ -109,7 +89,7 @@ asyncTest("r.fn.scale", function() {
 asyncTest("r.fn.move", function() {
   var aqua = r("#aqua");
 
-  aqua.move("-100px,100px", {
+  aqua.move(100, 100, {
     duration: 1,
     callback: function() {
       ok(true);

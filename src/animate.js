@@ -1,26 +1,17 @@
 (function() {
 
-    // CSS3 transition based-animation.
-    // Easy and smooth but not flexible.
-    // Can we stop (undo) animation with saving original css properties?
+    // CSS3 transition/transform based-animation
 
-    function animate(properties, opt) {
-        var i = 0, all = this.length, count = 0,
-            options = (typeof opt === "object") ? opt : {},
-            callback;
-
-        if ( typeof opt === "function" ) {
-            callback = opt;
-        }
-        else if ( typeof options.callback === "function" ) {
-            callback = options.callback;
-        }
-        else {
-            callback = function() {};
-        }
+    function animate(properties, opts) {
+        var count = 0, all = this.length,
+            options = opts || {}, 
+            callback =  ( typeof options.callback === "function" ) ? options.callback : function() {};
 
         options.callback = function() {
-            if ( ++count === all ) {
+            ++count;
+            console.log(count);
+            console.log(all);
+            if ( count === all ) {
                 callback();
             }
         };
@@ -32,10 +23,10 @@
 
     function single(wrapped, properties, options) {
         var dur = 0.3,
-        ease = "ease-in-out",
-        transNum,
-        endCall = 0,
-        cssParams = {};
+            ease = "ease-in-out",
+            transNum,
+            endCall = 0,
+            cssParams = {};
 
         if ( properties instanceof Array ) {
             cssParams["-webkit-transform"] = properties.join(" ");
@@ -56,10 +47,10 @@
             }
 
             if ( typeof options.callback === "function" ) {
-                wrapped.bind("webkitTransitionEnd", function(e) {
+                wrapped.bind("webkitTransitionEnd", function(evt) {
                     ++endCall;
                     if ( transNum === endCall ) {
-                        options.callback(e);
+                        options.callback(evt);
                         wrapped.unbind("webkitTransitionEnd");
                     }
                 });
