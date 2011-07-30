@@ -52,6 +52,10 @@ r(function() {
         touch = { x1: 0, x2: 0, y1: 0, y2: 0, target: null };
     });
 
+    r(body).bind("touchcancel", function(evt) {
+        touch = { x1: 0, x2: 0, y1: 0, y2: 0, target: null };
+    });
+
     touchEvents.forEach(function(event) {
         r.fn[event] = function(callback, useCapture) {
             this.bind(event, callback, useCapture);

@@ -13,15 +13,22 @@ test("just touch with your iPhone/Android devices", function() {
                 r(touchspace).add("touchstart: " + t.pageX + ", " + t.pageY + "<br />");
             }
         }, false);
+
         touchspace.addEventListener("touchmove", function(evt) {
             var t = evt.touches[0];
-            if ( Math.random() > 0.8 ) {
+            if ( Math.random() > 0.9 ) {
                 r(touchspace).add("touchmove: " + t.pageX + ", " + t.pageY + "<br />");
             }
         }, false);
+
         touchspace.addEventListener("touchend", function(evt) {
             var t = evt.touches[0];
             r(touchspace).add("touchend: " + t.pageX + ", " + t.pageY + "<br />");
+        }, false);
+
+        touchspace.addEventListener("touchcancel", function(evt) {
+            var t = evt.touches[0];
+            r(touchspace).add("touchcancel: " + t.pageX + ", " + t.pageY + "<br />");
         }, false);
 
         r("#button").bind(event, function() {
