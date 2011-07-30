@@ -7,8 +7,8 @@ asyncTest("animate default", function() {
   var red = r("#red");
 
   red.animate({
-    "width": "200px",
-    "height": "200px",
+    "width": "100px",
+    "height": "100px",
     "opacity": 0.5
   }, {
     callback: function() {
@@ -18,50 +18,99 @@ asyncTest("animate default", function() {
   });
 });
 
-asyncTest("animate with duration", function() {
+//asyncTest("animate with duration", function() {
 
-  var green = r("#green");
-  var before = Date.now();
+  //var green = r("#green");
+  //var before = Date.now();
 
-  green.animate({
-    "width": "200px",
-    "height": "200px",
-    "opacity": 0.5
-  }, {
-    duration: 2,
+  //green.animate({
+    //"width": "100px",
+    //"height": "100px",
+    //"opacity": 0.5
+  //}, {
+    //duration: 2,
+    //callback: function() {
+      //ok( Date.now() - before > 1900, "fire after at least 1900 msec after");
+      //is( green.css("opacity"), "0.5", "opacity changes to 0.5");
+      //start();
+    //}
+  //});
+//});
+
+//asyncTest("animation callback should be called just once", function() {
+
+  //var spy = sinon.spy(function() {
+    //start();
+    //ok ( spy.calledOnce, "callback called just once" );
+  //});
+
+  //r("#blue").animate({
+    //"width": "100px",
+    //"height": "100px"
+  //}, {
+    //callback: spy
+  //});
+
+//});
+
+//asyncTest("r.fn.slideDown", function() {
+
+  //var spy = sinon.spy(function() {
+    //ok ( spy.calledOnce, "callback called just once" );
+    //start();
+  //});
+
+  //r("#yellow").slideDown( { callback: spy, duration: 2 } );
+//});
+
+//asyncTest("r.fn.slideUp", function() {
+
+  //var spy = sinon.spy(function() {
+    //ok ( spy.calledOnce, "callback called just once" );
+    //start();
+  //});
+
+  //r("#cyan").slideUp( { callback: spy, duration: 2 } );
+//});
+
+asyncTest("r.fn.fadeIn", function() {
+
+  var spy = sinon.spy(function() {
+    ok ( spy.calledOnce, "callback called just once" );
+    start();
+  });
+
+  r("#magenta").fadeIn( { callback: spy, duration: 2 } );
+});
+
+asyncTest("r.fn.fadeOut", function() {
+
+  var spy = sinon.spy(function() {
+    ok ( spy.calledOnce, "callback called just once" );
+    r("#brown").show();
+    start();
+  });
+
+  r("#brown").fadeOut( { callback: spy, duration: 2 } );
+});
+
+asyncTest("r.fn.scale", function() {
+  var black = r("#black");
+
+  black.scale("0.8, 1.0", {
+    duration: 1,
     callback: function() {
-      ok( Date.now() - before > 1900, "fire after at least 1900 msec after");
-      is( green.css("opacity"), "0.5", "opacity changes to 0.5");
+      ok(true);
       start();
     }
   });
 });
 
-asyncTest("animation callback should be called just once", function() {
+asyncTest("r.fn.move", function() {
+  var aqua = r("#aqua");
 
-  var spy = sinon.spy(function() {
-    start();
-    ok ( spy.calledOnce, "callback called just once" );
-  });
-
-  r("#blue").animate({
-    "width": "200px",
-    "height": "200px"
-  }, {
-    callback: spy
-  });
-
-});
-
-asyncTest("animate with transform", function() {
-
-  var black = r("#black");
-
-  black.animate([
-    "rotate(30deg)",
-    "scale(0.5)"
-  ], {
-    duration: 2,
+  aqua.move("-100px,100px", {
+    duration: 1,
     callback: function() {
       ok(true);
       start();
