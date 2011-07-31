@@ -9,8 +9,6 @@
 
         options.callback = function() {
             ++count;
-            console.log(count);
-            console.log(all);
             if ( count === all ) {
                 callback();
             }
@@ -22,7 +20,7 @@
     }
 
     function single(wrapped, properties, options) {
-        var dur = 0.3,
+        var dur = "0.3s",
             ease = "ease-in-out",
             transNum,
             endCall = 0,
@@ -38,8 +36,11 @@
 
         if ( typeof options === "object" ) {
 
-            if ( typeof options.duration === "number" || typeof options.duration === "string" ) {
+            if ( typeof options.duration === "string" ) {
                 dur = options.duration;
+            }
+            else if ( typeof options.duration === "number" ) {
+                dur = options.duration + "s";
             }
 
             if ( typeof options.easing === "string" ) {
@@ -58,7 +59,10 @@
 
         }
 
-        cssParams["-webkit-transition"] = dur + "s " + ease;
+        cssParams["-webkit-transition"] = dur + " " + ease;
+        cssParams["-webkit-backface-visibility"] = "hidden";
+        cssParams["-webkit-perspective"] = "1000";
+        cssParams["-webkit-transform-origin"] = "0 0";
 
         wrapped.css(cssParams);
     }
@@ -87,28 +91,28 @@
 
     function move(xMove, yMove, options) {
         if ( typeof xMove === "number" && typeof yMove === "number" ) {
-            this.animate([ "translate(" + xMove + "px," + yMove + "px)" ], options);
+            this.animate([ "translate3d(" + xMove + "px," + yMove + "px,0px)" ], options);
         }
         else if ( typeof xMove === "string" && typeof yMove === "string" ) {
-            this.animate([ "translate(" + xMove + "," + yMove + ")" ], options);
+            this.animate([ "translate(" + xMove + "," + yMove + ",0px)" ], options);
         }
     }
 
     function moveX(xMove, options) {
         if ( typeof xMove === "number" ) {
-            this.animate([ "translateX(" + xMove + "px)" ], options);
+            this.animate([ "translate3d(" + xMove + "px,0px,0px)" ], options);
         }
         else if ( typeof xMove === "string" ) {
-            this.animate([ "translateX(" + xMove + ")" ], options);
+            this.animate([ "translate3d(" + xMove + ",0px,0px)" ], options);
         }
     }
 
     function moveY(yMove, options) {
         if ( typeof yMove === "number" ) {
-            this.animate([ "translateY(" + yMove + "px)" ], options);
+            this.animate([ "translate3d(0px," + yMove + "px,0px)" ], options);
         }
         else if ( typeof yMove === "string" ) {
-            this.animate([ "translateY(" + yMove + ")" ], options);
+            this.animate([ "translate3d(0px," + yMove + ",0px)" ], options);
         }
     }
 

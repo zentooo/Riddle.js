@@ -107,6 +107,7 @@
         addClass: addClass,
         removeClass: removeClass,
         hasClass: hasClass,
+        swapClass: swapClass,
 
         // event
         bind: bind,
@@ -515,6 +516,19 @@
         }
     }
 
+    /**
+     * swap two class
+     * @name swapClass
+     * @function
+     * @memberOf r.fn
+     * @param from {string}
+     * @param to {string}
+    */
+    function swapClass(from, to) {
+        this.removeClass(from);
+        this.addClass(to);
+    }
+
 
     // event handling
 
@@ -703,7 +717,7 @@
 
     r.ajax = ajax;
 
-    r.version = "0.2.5";
+    r.version = "0.2.6";
 
     window.r = r;
 
