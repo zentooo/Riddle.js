@@ -1,22 +1,29 @@
 (function() {
 
+    var has3d = 'WebKitCSSMatrix' in window && 'm11' in new WebKitCSSMatrix(),
+        open = 'translate' + (has3d ? '3d(' : '('),
+        close = has3d ? ',0)' : ')';
+
     // CSS3 transition/transform based-animation
 
-    function animate(properties, opts) {
-        var count = 0, all = this.length,
-            options = opts || {}, 
-            callback =  ( typeof options.callback === "function" ) ? options.callback : function() {};
+    function getTranslate(wrapped) {
+        var m = wrapped.css("-webkit-transform").match(/matrix\([\d.]+,\s[\d.]+,\s[\d.]+,\s[\d.]+,\s([\d.]+),\s([\d.]+)\)/);
+        if ( m !== null && m.length === 3 ) {
+            return { x: Number(m[1]), y: Number(m[2]) };
+        }
+        else {
+            return { x: 0, y: 0 };
+        }
+    }
 
-        options.callback = function() {
-            ++count;
-            if ( count === all ) {
-                callback();
-            }
-        };
-
-        this.each(function(wrapped) {
-            single(wrapped, properties, options);
-        });
+    function getScale(wrapped) {
+        var m = wrapped.css("-webkit-transform").match(/matrix\(([\d.]+),\s[\d.]+,\s[\d.]+,\s([\d.]+),\s[\d.]+,\s[\d.]+\)/);
+        if ( m !== null && m.length === 3 ) {
+            return { x: Number(m[1]), y: Number(m[2]) };
+        }
+        else {
+            return { x: 1.0, y: 1.0 };
+        }
     }
 
     function single(wrapped, properties, options) {
@@ -77,74 +84,110 @@
     }
 
 
-    function scale(xScale, yScale, options) {
-        this.animate([ "scale(" + xScale + "," + yScale + ")" ], options);
-    }
+    r.fn.animate = function animate(properties, opts) {
+        var count = 0, all = this.length,
+            options = opts || {},
+            callback =  ( typeof options.callback === "function" ) ? options.callback : function() {};
 
-    function scaleX(xScale, options) {
-        this.animate([ "scale(" + xScale + ",1.0)" ], options);
-    }
+        options.callback = function() {
+            ++count;
+            if ( count === all ) {
+                callback();
+            }
+        };
 
-    function scaleY(xScale, options) {
-        this.animate([ "scale(1.0," + yScale + ")" ], options);
-    }
+        this.each(function(wrapped) {
+            single(wrapped, properties, options);
+        });
+    };
 
-    function move(xMove, yMove, options) {
+    r.fn.scale = function scale(xScale, yScale, options) {
+        this.animate(["scale(" + xScale + "," + yScale + ")" ], options);
+    };
+
+    r.fn.scaleR = function scaleR(xScale, yScale, options) {
+        var current = getScale(this);
+        this.animate(["scale(" + current.x * xScale + "," + current.y * yScale + ")" ], options);
+    };
+
+    r.fn.scaleX = function scaleX(xScale, options) {
+        var current = getScale(this);
+        this.animate(["scale(" + xScale + "," + current.y + ")"], options);
+    };
+
+    r.fn.scaleRX = function scaleRX(xScale, options) {
+        var current = getScale(this);
+        this.animate(["scale(" + current.x * xScale + "," + current.y + ")"], options);
+    };
+
+    r.fn.scaleY = function scaleY(xScale, options) {
+        var current = getScale(this);
+        this.animate(["scale(" + current.x  + "," + yScale + ")"], options);
+    };
+
+    r.fn.scaleRY = function scaleRY(yScale, options) {
+        var current = getScale(this);
+        this.animate(["scale(" + current.x  + "," + current.y * yScale + ")"], options);
+    };
+
+    r.fn.move = function move(xMove, yMove, options) {
         if ( typeof xMove === "number" && typeof yMove === "number" ) {
-            this.animate([ "translate3d(" + xMove + "px," + yMove + "px,0px)" ], options);
+            this.animate([open + xMove + "px," + yMove + "px" + close], options);
         }
         else if ( typeof xMove === "string" && typeof yMove === "string" ) {
-            this.animate([ "translate(" + xMove + "," + yMove + ",0px)" ], options);
+            this.animate([open + xMove + "," + yMove + close], options);
         }
-    }
+    };
 
-    function moveX(xMove, options) {
+    r.fn.moveR = function moveR(xMove, yMove, options) {
+        var current = getTranslate(this), rx = current.x + xMove, ry = current.y + yMove;
+        this.animate([open + rx + "px," + ry + "px" + close], options);
+    };
+
+    r.fn.moveX = function moveX(xMove, options) {
+        var current = getTranslate(this);
         if ( typeof xMove === "number" ) {
-            this.animate([ "translate3d(" + xMove + "px,0px,0px)" ], options);
+            this.animate([open + xMove + "px," + current.y + "px" + close], options);
         }
         else if ( typeof xMove === "string" ) {
-            this.animate([ "translate3d(" + xMove + ",0px,0px)" ], options);
+            this.animate([open + xMove + "," + current.y + close], options);
         }
-    }
+    };
 
-    function moveY(yMove, options) {
+    r.fn.moveRX = function moveRX(xMove, yMove, options) {
+        var current = getTranslate(this), rx = current.x + xMove;
+        this.animate([open + rx + "px," + current.y + "px" + close], options);
+    };
+
+    r.fn.moveY = function moveY(yMove, options) {
+        var current = getTranslate(this);
         if ( typeof yMove === "number" ) {
-            this.animate([ "translate3d(0px," + yMove + "px,0px)" ], options);
+            this.animate([open + current.x + "px," + yMove  + "px" + close], options);
         }
         else if ( typeof yMove === "string" ) {
-            this.animate([ "translate3d(0px," + yMove + ",0px)" ], options);
+            this.animate([open + current.x + "px," + yMove + close], options);
         }
-    }
+    };
 
-    function fadeIn(options) {
+    r.fn.moveRY = function moveRY(yMove, options) {
+        var current = getTranslate(this), ry = current.y + yMove;
+        this.animate([open + current.x + "px," + ry + "px" + close], options);
+    };
+
+    r.fn.fadeIn = function fadeIn(options) {
         this.animate({ opacity: 1 }, options);
-    }
+    };
 
-    function fadeOut(options) {
+    r.fn.fadeOut = function fadeOut(options) {
         this.animate({ opacity: 0 }, options);
-    }
+    };
 
-    function show(options) {
+    r.fn.show = function show(options) {
         this.animate({ "visibility": "visible" }, options);
-    }
+    };
 
-    function hide(options) {
+    r.fn.hide = function hide(options) {
         this.animate({ "visibility": "hidden" }, options);
-    }
+    };
 
-    r.fn.animate = animate;
-
-    r.fn.scale = scale;
-    r.fn.scaleX = scaleX;
-    r.fn.scaleY = scaleY;
-
-    r.fn.move = move;
-    r.fn.moveX = moveX;
-    r.fn.moveY = moveY;
-
-    r.fn.fadeIn = fadeIn;
-    r.fn.fadeOut = fadeOut;
-
-    r.fn.show = show;
-    r.fn.hide = hide;
 })();

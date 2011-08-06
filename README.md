@@ -5,7 +5,7 @@ Riddle.js is simple and stupid selector-based JavaScript library mainly for iPho
 
 * riddle.js (20k) -> original Riddle.js source code, for development
 * riddle.min.js (4.9k) -> Riddle.js minified with Closure Compiler
-* riddle-all.min.js (9.7k) -> Riddle.js and all included plugins combined and minified
+* riddle-all.min.js (11k) -> Riddle.js and all included plugins combined and minified
 
 
 Riddle.js is:
