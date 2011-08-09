@@ -7,7 +7,7 @@
     // CSS3 transition/transform based-animation
 
     function getTranslate(wrapped) {
-        var m = wrapped.css("-webkit-transform").match(/matrix\([\d.]+,\s[\d.]+,\s[\d.]+,\s[\d.]+,\s([\d.]+),\s([\d.]+)\)/);
+        var m = wrapped.css("-webkit-transform").match(/matrix\([\-\d.]+,\s[\-\d.]+,\s[\-\d.]+,\s[\-\d.]+,\s([\-\d.]+),\s([\-\d.]+)\)/);
         if ( m !== null && m.length === 3 ) {
             return { x: Number(m[1]), y: Number(m[2]) };
         }
