@@ -296,13 +296,9 @@
     function add(item, position) {
         var text, pos = position || "last";
 
-        if ( item.__proto__ === r.fn ) {
-            text = item.map(function(el) {
-                return el.outerHTML;
-            }).join("");
-
+        if ( typeof item === "string" ) {
             this.forEach(function(elem) {
-                add[pos](elem, text);
+                add[pos](elem, item);
             });
         }
         else if ( item instanceof HTMLElement ) {
@@ -311,9 +307,13 @@
                 add[pos](elem, text);
             });
         }
-        else if ( typeof item === "string" ) {
+        else if ( item.__proto__ === r.fn ) {
+            text = item.map(function(el) {
+                return el.outerHTML;
+            }).join("");
+
             this.forEach(function(elem) {
-                add[pos](elem, item);
+                add[pos](elem, text);
             });
         }
         return this;
