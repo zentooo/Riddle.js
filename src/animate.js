@@ -7,7 +7,8 @@
     // CSS3 transition/transform based-animation
 
     function getTranslate(wrapped) {
-        var m = wrapped.css("-webkit-transform").match(/matrix\([\-\d.]+,\s[\-\d.]+,\s[\-\d.]+,\s[\-\d.]+,\s([\-\d.]+),\s([\-\d.]+)\)/);
+        var transform = wrapped.css("-webkit-transform"),
+            m = transform.match(/matrix\([\-\d.]+,\s[\-\d.]+,\s[\-\d.]+,\s[\-\d.]+,\s([\-\d.]+),\s([\-\d.]+)\)/);
         if ( m !== null && m.length === 3 ) {
             return { x: Number(m[1]), y: Number(m[2]) };
         }
@@ -17,7 +18,8 @@
     }
 
     function getScale(wrapped) {
-        var m = wrapped.css("-webkit-transform").match(/matrix\(([\d.]+),\s[\d.]+,\s[\d.]+,\s([\d.]+),\s[\d.]+,\s[\d.]+\)/);
+        var transform = wrapped.css("-webkit-transform"),
+            m = transform.match(/matrix\(([\d.]+),\s[\d.]+,\s[\d.]+,\s([\d.]+),\s[\d.]+,\s[\d.]+\)/);
         if ( m !== null && m.length === 3 ) {
             return { x: Number(m[1]), y: Number(m[2]) };
         }
