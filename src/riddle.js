@@ -590,13 +590,13 @@
     // ajax
 
     function encode(obj) {
-        var result = "?", set = [], key;
+        var set = [], key;
 
         for ( key in obj ) {
             set.push(enc(key) + "=" + enc(obj[key]));
         }
 
-        return result + set.join("&");
+        return set.join("&");
     }
 
     /**
@@ -633,8 +633,9 @@
         var xhr = new XMLHttpRequest(),
         options = options || {},
         error = error || function() {},
+        method = options.method || "GET",
         header = options.header || {},
-        ctype = options.ctype || (( options.method === "POST" ) ? "application/x-www-form-urlencoded" : ""),
+        ctype = options.ctype || (( method === "POST" ) ? "application/x-www-form-urlencoded" : ""),
         data = options.data || "",
         key;
 
@@ -652,7 +653,7 @@
             data = encode(data);
         }
 
-        xhr.open(options.method || "GET", url, true);
+        xhr.open(method, url, true);
 
         if ( ctype ) {
             xhr.setRequestHeader("Content-Type", ctype);
