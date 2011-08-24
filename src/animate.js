@@ -8,7 +8,8 @@
 
     function getTranslate(wrapped) {
         var transform = wrapped.css("-webkit-transform"),
-            m = transform.match(/matrix\([\-\d.]+,\s[\-\d.]+,\s[\-\d.]+,\s[\-\d.]+,\s([\-\d.]+),\s([\-\d.]+)\)/);
+            m = ( typeof transform === "string" ) ? transform.match(/matrix\([\-\d.]+,\s[\-\d.]+,\s[\-\d.]+,\s[\-\d.]+,\s([\-\d.]+),\s([\-\d.]+)\)/) : null;
+
         if ( m !== null && m.length === 3 ) {
             return { x: Number(m[1]), y: Number(m[2]) };
         }
@@ -19,7 +20,8 @@
 
     function getScale(wrapped) {
         var transform = wrapped.css("-webkit-transform"),
-            m = transform.match(/matrix\(([\d.]+),\s[\d.]+,\s[\d.]+,\s([\d.]+),\s[\d.]+,\s[\d.]+\)/);
+            m = ( typeof transform === "string" ) ? transform.match(/matrix\(([\d.]+),\s[\d.]+,\s[\d.]+,\s([\d.]+),\s[\d.]+,\s[\d.]+\)/) : null;
+
         if ( m !== null && m.length === 3 ) {
             return { x: Number(m[1]), y: Number(m[2]) };
         }
