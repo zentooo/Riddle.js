@@ -631,13 +631,14 @@
     */
     function ajax(url, success, error, options) {
         var xhr = new XMLHttpRequest(),
-        options = options || {},
-        error = error || function() {},
-        method = options.method || "GET",
-        header = options.header || {},
-        ctype = options.ctype || (( method === "POST" ) ? "application/x-www-form-urlencoded" : ""),
-        data = options.data || "",
-        key;
+            options = options || {},
+            success = success || function() {},
+            error = error || function() {},
+            method = options.method || "GET",
+            header = options.header || {},
+            ctype = options.ctype || (( method === "POST" ) ? "application/x-www-form-urlencoded" : ""),
+            data = options.data || "",
+            key;
 
         xhr.onreadystatechange = function() {
             if ( xhr.readyState === 4 ) {

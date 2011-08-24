@@ -118,7 +118,7 @@ next(function() {
     };
 
     testOption( { data: data, method: "POST" }, function(server) {
-      var encoded = server.requests[0].requestBody.slice(1), original = {};
+      var encoded = server.requests[0].requestBody, original = {};
 
       encoded.split("&").forEach(function(kv) {
         var ary = kv.split("="), k = ary[0], v = ary[1];
