@@ -50,6 +50,10 @@ test("r.fn.css with one element", function() {
   list.css( { "visibility": "visible", "color": "#ffffff" } );
   is( list.css("visibility"), "visible", "visibility get back to visible");
   is( list.css("color"), "rgb(255, 255, 255)", "color updated as #ffffff");
+
+  list.css( { "visibility": null, "color": null } );
+  is( list.css("visibility"), "visible", "visibility changed to default value");
+  is( list.css("color"), "rgb(0, 0, 0)", "color back to #000000");
 });
 
 test("r.fn.css with multiple elements", function() {

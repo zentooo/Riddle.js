@@ -453,14 +453,16 @@
         }
         else if ( typeof first === "object" ) {
             this.forEach(function(elem) {
+                var text = ";";
                 for ( var key in first ) {
                     if ( first[key] === null ) {
                         elem.style.removeProperty(key);
                     }
                     else {
-                        elem.style.setProperty(key, first[key], "");
+                        text += key + ":" + first[key] + ";";
                     }
                 }
+                elem.style.cssText += text;
             });
         }
         return this;
@@ -719,7 +721,7 @@
 
     r.ajax = ajax;
 
-    r.version = "0.2.6";
+    r.version = "0.2.7";
 
     window.r = r;
 
