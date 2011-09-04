@@ -1,8 +1,9 @@
 /** @license Naosuke Yokoe - http://github.com/zentooo/Riddle.js - MIT Licensed */
 (function(doc, toArray, enc) {
 
-    var listeners = {}, nodeId = 1,
-        events = ["click", "submit", "focus", "blur", "scroll", "select", "change"],
+    var listeners = {}, 
+        nodeId = 1,
+        body,
         domLoaded = false;
 
     /**
@@ -115,16 +116,11 @@
     };
 
     doc.addEventListener("DOMContentLoaded", function(e) {
+        body = r(doc.body);
         domLoaded = true;
     }, false);
 
-    events.forEach(function(event) {
-        r.fn[event] = function(callback, useCapture) {
-            this.bind(event, callback, useCapture);
-        };
-    });
-
-    r.fn.__proto__ = Array.prototype;
+    r.fn.__proto__ = [];
 
 
     // Array++
@@ -231,7 +227,7 @@
             }
         }
         else {
-            if ( typeof item === "string" ) {
+            if ( typeof item === "string" || typeof item === "number" ) {
                 this.forEach(function(elem) {
                     elem.innerHTML = item;
                 });
@@ -588,6 +584,27 @@
         return this;
     }
 
+    /**
+     * delegate event handling
+     * @name delegate
+     * @function
+     * @memberOf r
+     * @param selector {string}
+     * @param event {string}
+     * @param callback {function(e: Object)}
+     * @example
+     * r.delegate(".button", "click", function(e) {
+     *   alert("button clicked on" + e.target.tagName);
+     * });
+    */
+    function delegate(selector, event, callback) {
+        body.bind(event, function(evt) {
+            if ( r(selector).detect(function(el) { return el === evt.target; }) ) {
+                callback(evt);
+            }
+        });
+    }
+
 
     // ajax
 
@@ -721,7 +738,9 @@
 
     r.ajax = ajax;
 
-    r.version = "0.2.7";
+    r.delegate = delegate;
+
+    r.version = "0.2.8";
 
     window.r = r;
 

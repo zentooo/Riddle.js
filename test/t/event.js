@@ -106,12 +106,17 @@ test("r.fn.unbind for all", function() {
   ok( ! blurSpy.called, "blur emitted but callback function not called");
 });
 
-// test for shofthand methods
 
-test("r.fn.[\"eventName\"]", function() {
-  var button = r("#button5");
+test("r.fn.delegate", function() {
+    var newButton = r(document.createElement("button"));
+    var clickSpy = sinon.spy(function() {});
 
-  events.forEach(function(event) {
-    testShortCut(button, event);
-  });
+    r.delegate(".button", "click", clickSpy);
+
+    newButton.addClass("button");
+    document.body.appendChild(newButton[0]);
+
+    emit(newButton, "click");
+
+    ok( clickSpy.called, "callback called with delegate");
 });

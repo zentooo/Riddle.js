@@ -7,19 +7,25 @@ test("r.fn.html - get", function() {
   var div = r(".div1");
   is( div.html().trim(), "div", "innerHTML of div is div");
 
-  var li = r("#list1 li");
+  var li = r("#list0 li");
   li.html().forEach(function(html) {
     is( html.trim(), "item", "innerHTML of li is item");
   });
 });
 
-test("r.fn.html - set with string", function() {
+test("r.fn.html - set with string and number", function() {
 
   var li = r("#list1 li");
   li.html("hoge");
 
   li.html().forEach(function(html) {
     is( html.trim(), "hoge", "innerHTML of li is hoge");
+  });
+
+  li.html(0.1);
+
+  li.html().forEach(function(html) {
+    is( html.trim(), "0.1", "innerHTML of li is 0.1");
   });
 });
 
