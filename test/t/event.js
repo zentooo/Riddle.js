@@ -111,7 +111,7 @@ test("r.fn.delegate", function() {
     var newButton = r(document.createElement("button"));
     var clickSpy = sinon.spy(function() {});
 
-    r.delegate(".button", "click", clickSpy);
+    r(document.body).delegate(".button", "click", clickSpy);
 
     newButton.addClass("button");
     document.body.appendChild(newButton[0]);

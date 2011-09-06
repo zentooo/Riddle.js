@@ -3,7 +3,6 @@
 
     var listeners = {}, 
         nodeId = 1,
-        body,
         domLoaded = false;
 
     /**
@@ -112,11 +111,11 @@
 
         // event
         bind: bind,
-        unbind: unbind
+        unbind: unbind,
+        delegate: delegate
     };
 
     doc.addEventListener("DOMContentLoaded", function(e) {
-        body = r(doc.body);
         domLoaded = true;
     }, false);
 
@@ -567,13 +566,13 @@
      * @param event {string}
      * @param callback {function(e: Object)}
      * @example
-     * r.delegate(".button", "click", function(e) {
+     * r(document.body).delegate(".button", "click", function(e) {
      *   alert("button clicked on" + e.target.tagName);
      * });
     */
     function delegate(selector, event, callback) {
-        body.bind(event, function(evt) {
-            if ( r(selector).detect(function(el) { return el === evt.target; }) ) {
+        this.bind(event, function(evt) {
+            if ( r(selector, this).detect(function(el) { return el === evt.target; }) ) {
                 callback(evt);
             }
         });
@@ -711,8 +710,6 @@
     r.tag = tag;
 
     r.ajax = ajax;
-
-    r.delegate = delegate;
 
     r.version = "0.2.9";
 
