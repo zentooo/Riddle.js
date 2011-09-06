@@ -268,8 +268,6 @@
 
     /**
      * Append elements to selected NodeArray. <br />
-     * You can specify the position to insert by the second argument (default value is "last"), <br />
-     * see http://msdn.microsoft.com/ja-jp/library/cc428075.aspx or http://ejohn.org/blog/dom-insertadjacenthtml/
      * @name add
      * @function
      * @memberOf r.fn
@@ -280,56 +278,32 @@
      * r(".magical-girl").add(r("#madoka, #homura"));
      * @example
      * r("#madoka").add("homuhomu");
-     * @example
-     * r("#madoka").add("homuhomu", "prev");
-     * @example
-     * r("#madoka").add("homuhomu", "first");
-     * @example
-     * r("#madoka").add("homuhomu", "last");
-     * @example
-     * r("#madoka").add("homuhomu", "next");
     */
     function add(item, position) {
-        var text, pos = position || "last";
+        var fragment;
 
         if ( typeof item === "string" ) {
             this.forEach(function(elem) {
-                add[pos](elem, item);
+                elem.insertAdjacentHTML("beforeEnd", item);
             });
         }
         else if ( item instanceof HTMLElement ) {
-            text = item.outerHTML;
             this.forEach(function(elem) {
-                add[pos](elem, text);
+                elem.appendChild(item);
             });
         }
         else if ( item.__proto__ === r.fn ) {
-            text = item.map(function(el) {
-                return el.outerHTML;
-            }).join("");
+            fragment = doc.createDocumentFragment();
+            item.forEach(function(el) {
+                fragment.appendChild(el);
+            });
 
             this.forEach(function(elem) {
-                add[pos](elem, text);
+                elem.appendChild(fragment);
             });
         }
         return this;
     }
-
-    add.prev = function(elem, text) {
-        elem.insertAdjacentHTML("beforeBegin", text);
-    };
-
-    add.first = function(elem, text) {
-        elem.insertAdjacentHTML("afterBegin", text);
-    };
-
-    add.last = function(elem, text) {
-        elem.insertAdjacentHTML("beforeEnd", text);
-    };
-
-    add.next = function(elem, text) {
-        elem.insertAdjacentHTML("afterEnd", text);
-    };
 
 
     // attributes
@@ -740,7 +714,7 @@
 
     r.delegate = delegate;
 
-    r.version = "0.2.8";
+    r.version = "0.2.9";
 
     window.r = r;
 

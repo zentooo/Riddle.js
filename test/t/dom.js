@@ -69,7 +69,7 @@ test("r.fn.add - add NodeArray", function() {
   ul.add(lis);
 
   is ( r("#addto1 li").length, 3, "elements added" );
-  is ( r("#addfrom1 li").length, 3, "original elements cloned ( not removed )" );
+  is ( r("#addfrom1 li").length, 0, "original elements removed" );
 });
 
 test("r.fn.add - add HTMLElement", function() {
@@ -80,7 +80,7 @@ test("r.fn.add - add HTMLElement", function() {
   ul.add(li);
 
   is ( r("#addto2 li").length, 1, "element added" );
-  is ( r("#addfrom2 li").length, 3, "original element cloned ( not removed )" );
+  is ( r("#addfrom2 li").length, 2, "original element removed" );
 });
 
 test("r.fn.add - add text", function() {
@@ -90,11 +90,4 @@ test("r.fn.add - add text", function() {
   ul.add("fuga");
 
   ok ( r("#addto3").html().match(/hoge\s*fuga/), "fuga inserted to last" );
-
-  ul.add("piyo", "first");
-
-  ok ( r("#addto3").html().match(/piyo\s*hoge\s*fuga/), "piyo inserted to first" );
-
-  ul.add("madoka", "prev");
-  ul.add("homura", "next");
 });
