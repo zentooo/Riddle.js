@@ -109,7 +109,10 @@ test("r.fn.unbind for all", function() {
 
 test("r.fn.delegate", function() {
     var newButton = r(document.createElement("button"));
-    var clickSpy = sinon.spy(function() {});
+    var clickSpy = sinon.spy(function(evt) {
+        is ( evt.target, newButton[0] );
+        is ( this, newButton[0] );
+    });
 
     r(document.body).delegate(".button", "click", clickSpy);
 

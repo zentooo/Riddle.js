@@ -573,7 +573,7 @@
     function delegate(selector, event, callback) {
         this.bind(event, function(evt) {
             if ( r(selector, this).detect(function(el) { return el === evt.target; }) ) {
-                callback(evt);
+                callback.call(evt.target, evt);
             }
         });
     }
