@@ -1,1 +1,1 @@
-../src/riddle.js
+../src/riddle.min.js
