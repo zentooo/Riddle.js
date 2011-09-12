@@ -572,8 +572,12 @@
     */
     function delegate(selector, event, callback) {
         this.bind(event, function(evt) {
-            if ( r(selector, this).detect(function(el) { return el === evt.target; }) ) {
-                callback.call(evt.target, evt);
+            var match = r(selector, this).detect(function(el) {
+                var res = el.compareDocumentPosition(el.target);
+                return (res === 0 || (res | Node.DOCUMENT_POSITION_CONTAINED_BY));
+            });
+            if ( match ) {
+                callback.call(match, evt);
             }
         });
     }

@@ -5,7 +5,7 @@ var events = ["click", "focus", "blur", "scroll", "select", "change"];
 is = strictEqual;
 
 function emit(el, eventName) {
-  var event = document.createEvent("Event");
+  var event = document.createEvent("MouseEvents");
   event.initEvent(eventName, true, true);
   ( el.__proto__ === r.fn ) ? el[0].dispatchEvent(event) : el.dispatchEvent(event);
 }
@@ -108,16 +108,19 @@ test("r.fn.unbind for all", function() {
 
 
 test("r.fn.delegate", function() {
+    var wrapperDiv = r(document.createElement("div"));
     var newButton = r(document.createElement("button"));
+
     var clickSpy = sinon.spy(function(evt) {
         is ( evt.target, newButton[0] );
-        is ( this, newButton[0] );
+        is ( this, wrapperDiv[0] );
     });
 
-    r(document.body).delegate(".button", "click", clickSpy);
+    r(document.body).delegate(".button-wrapper", "click", clickSpy);
 
-    newButton.addClass("button");
-    document.body.appendChild(newButton[0]);
+    wrapperDiv.addClass("button-wrapper");
+    wrapperDiv.add(newButton);
+    document.body.appendChild(wrapperDiv[0]);
 
     emit(newButton, "click");
 
