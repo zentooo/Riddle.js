@@ -122,7 +122,9 @@ test("r.fn.delegate", function() {
     wrapperDiv.add(newButton);
     document.body.appendChild(wrapperDiv[0]);
 
-    emit(newButton, "click");
+    emit(document.body, "click");
+    ok( ! clickSpy.called, "callback not called");
 
+    emit(newButton, "click");
     ok( clickSpy.called, "callback called with delegate");
 });
