@@ -73,7 +73,6 @@
         cssParams["-webkit-transition"] = dur + " " + ease;
         cssParams["-webkit-backface-visibility"] = "hidden";
         cssParams["-webkit-perspective"] = "1000";
-        cssParams["-webkit-transform-origin"] = "0 0";
 
         wrapped.css(cssParams);
     }
