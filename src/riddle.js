@@ -1,7 +1,7 @@
 /** @license Naosuke Yokoe - http://github.com/zentooo/Riddle.js - MIT Licensed */
 (function(doc, toArray, enc) {
 
-    var listeners = {}, 
+    var listeners = {},
         nodeId = 1,
         domLoaded = false;
 
@@ -399,11 +399,11 @@
         if ( typeof first === "string" ) {
             if ( typeof second === "undefined" ) {
                 if ( this.length === 1 ) {
-                    return getComputedStyle(this[0], "").getPropertyValue(first);
+                    return getComputedStyle(this[0], null).getPropertyValue(first);
                 }
                 else {
                     return this.map(function(elem) {
-                        return getComputedStyle(elem, "").getPropertyValue(first);
+                        return getComputedStyle(elem, null).getPropertyValue(first);
                     });
                 }
             }
@@ -415,7 +415,7 @@
                 }
                 else {
                     this.forEach(function(elem) {
-                        elem.style.setProperty(first, second, "");
+                        elem.style.setProperty(first, second, null);
                     });
                 }
             }
