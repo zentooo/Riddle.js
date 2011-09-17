@@ -28,7 +28,7 @@ asyncTest("animate with duration", function() {
     "height": "100px",
     "opacity": 0.5
   }, {
-    duration: 2,
+    duration: '2s',
     callback: function() {
       ok( Date.now() - before > 1900, "fire after at least 1900 msec after");
       is( green.css("opacity"), "0.5", "opacity changes to 0.5");
@@ -60,7 +60,7 @@ asyncTest("r.fn.fadeIn", function() {
     start();
   });
 
-  r("#magenta").fadeIn( { callback: spy, duration: 2 } );
+  r("#magenta").fadeIn( { callback: spy, duration: '2s' } );
 });
 
 asyncTest("r.fn.fadeOut", function() {
@@ -71,14 +71,14 @@ asyncTest("r.fn.fadeOut", function() {
     start();
   });
 
-  r("#brown").fadeOut( { callback: spy, duration: 2 } );
+  r("#brown").fadeOut( { callback: spy, duration: '2s' } );
 });
 
 asyncTest("r.fn.scale", function() {
   var black = r("#black");
 
   black.scale(0.8, 1.0, {
-    duration: 1,
+    duration: '1s',
     callback: function() {
       ok(true);
       start();
@@ -90,7 +90,7 @@ asyncTest("r.fn.move", function() {
   var aqua = r("#aqua");
 
   aqua.move(100, 100, {
-    duration: 1,
+    duration: '1s',
     callback: function() {
       ok(true);
       start();

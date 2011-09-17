@@ -2,7 +2,9 @@
 
     var has3d = 'WebKitCSSMatrix' in window && 'm11' in new WebKitCSSMatrix(),
         open = 'translate' + (has3d ? '3d(' : '('),
-        close = has3d ? ',0)' : ')';
+        close = has3d ? ',0)' : ')',
+        DEFAULT_DURATION = "0.3s",
+        DEFAULT_EASING_FUNCTION = "ease-in-out";
 
     // CSS3 transition/transform based-animation
 
@@ -31,23 +33,22 @@
     }
 
     function asMilliSecond(duration) {
-        var m;
-        if ( typeof duration === "number" ) {
-            return (duration < 10) ? duration * 1000 : duration;
+        var m = duration.match(/(\d+(?:\.\d+)?)(m?)(s?)/);
+        if ( m[2] === "" && m[3] === "s" ) {
+            return Number(m[1]) * 1000;
         }
-        else if ( typeof duration === "string" ) {
-            m = duration.match(/(\d+(?:\.\d+)?)(m?)(s?)/);
-            if ( m[2] === "" && m[3] === "s" ) {
-                return Number(m[1]) * 1000;
-            }
-            else if ( m[2] === "m" && m[3] === "s" ) {
-                return Number(m[1]);
-            }
+        else if ( m[2] === "m" && m[3] === "s" ) {
+            return Number(m[1]);
+        }
+        else {
+            return 300;
         }
     }
 
     function waitTransitionEnd(wrapped, duration, callback, unbind) {
         var cb, timerId;
+
+        duration = duration || DEFAULT_DURATION;
 
         cb = function(evt, id) {
             clearTimeout(id);
@@ -65,12 +66,11 @@
     }
 
     function single(wrapped, properties, options) {
-        var dur = "0.3s",
-            ease = "ease-in-out",
+        var opts = options || {},
+            dur = opts.duration || DEFAULT_DURATION,
+            ease = opts.easing || DEFAULT_EASING_FUNCTION,
             transNum,
             endCall = 0,
-            cb,
-            timerId,
             cssParams = {};
 
         if ( properties instanceof Array ) {
@@ -81,28 +81,15 @@
             transNum = copy(properties, cssParams);
         }
 
-        if ( typeof options === "object" ) {
+        console.dir(opts);
 
-            if ( typeof options.duration === "string" ) {
-                dur = options.duration;
-            }
-            else if ( typeof options.duration === "number" ) {
-                dur = options.duration + "s";
-            }
-
-            if ( typeof options.easing === "string" ) {
-                ease = options.easing;
-            }
-
-            if ( typeof options.callback === "function" ) {
-                waitTransitionEnd(wrapped, dur, function() {
-                    ++endCall;
-                    if ( transNum === endCall ) {
-                        options.callback();
-                    }
-                });
-            }
-
+        if ( typeof options.callback === "function" ) {
+            waitTransitionEnd(wrapped, dur, function() {
+                ++endCall;
+                if ( transNum === endCall ) {
+                    options.callback();
+                }
+            });
         }
 
         cssParams["-webkit-transition"] = dur + " " + ease;
@@ -134,12 +121,12 @@
         }
     }
 
-    r.fn.animate = function animate(properties, opts) {
+    r.fn.animate = function animate(properties, options) {
         var count = 0, all = this.length,
-            options = opts || {},
-            callback =  ( typeof options.callback === "function" ) ? options.callback : function() {};
+            opts = options || {},
+            callback = opts.callback || function() {};
 
-        options.callback = function() {
+        opts.callback = function() {
             ++count;
             if ( count === all ) {
                 callback();
@@ -147,7 +134,7 @@
         };
 
         this.each(function(wrapped) {
-            single(wrapped, properties, options);
+            single(wrapped, properties, opts);
         });
     };
 
@@ -220,7 +207,7 @@
     r.fn.fadeOut = function fadeOut(options) {
         var that = this;
         this.animate({ opacity: 0 }, options);
-        waitTransitionEnd(this, options.duration || "0.3s", function() {
+        waitTransitionEnd(this, (typeof options === "object") ? options.duration : null, function() {
             that.hide();
         }, true);
     };
