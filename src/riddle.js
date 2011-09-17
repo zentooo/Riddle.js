@@ -35,6 +35,9 @@
         if ( typeof first === "string" ) {
             return queryWithContext(first, second, "querySelectorAll");
         }
+        else if ( first instanceof Array ) {
+            return wrap(first);
+        }
         else if ( first instanceof HTMLElement ) {
             return wrap(elementAsArray(first));
         }
