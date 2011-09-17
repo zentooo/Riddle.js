@@ -67,7 +67,7 @@ asyncTest("r.fn.fadeOut", function() {
 
   var spy = sinon.spy(function() {
     ok ( spy.calledOnce, "callback called just once" );
-    r("#brown").show();
+    //r("#brown").show();
     start();
   });
 

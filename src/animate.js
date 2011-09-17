@@ -30,11 +30,47 @@
         }
     }
 
+    function asMilliSecond(duration) {
+        var m;
+        if ( typeof duration === "number" ) {
+            return (duration < 10) ? duration * 1000 : duration;
+        }
+        else if ( typeof duration === "string" ) {
+            m = duration.match(/(\d+(?:\.\d+)?)(m?)(s?)/);
+            if ( m[2] === "" && m[3] === "s" ) {
+                return Number(m[1]) * 1000;
+            }
+            else if ( m[2] === "m" && m[3] === "s" ) {
+                return Number(m[1]);
+            }
+        }
+    }
+
+    function waitTransitionEnd(wrapped, duration, callback, unbind) {
+        var cb, timerId;
+
+        cb = function(evt, id) {
+            clearTimeout(id);
+            callback();
+            if ( unbind ) {
+                wrapped.unbind("webkitTransitionEnd");
+            }
+        };
+
+        timerId = setTimeout(function() {
+            cb(null, timerId);
+        }, asMilliSecond(duration) + 200);
+
+        wrapped.bind("webkitTransitionEnd", cb);
+    }
+
     function single(wrapped, properties, options) {
         var dur = "0.3s",
             ease = "ease-in-out",
             transNum,
             endCall = 0,
+            cb,
+            timerId,
             cssParams = {};
 
         if ( properties instanceof Array ) {
@@ -59,11 +95,10 @@
             }
 
             if ( typeof options.callback === "function" ) {
-                wrapped.bind("webkitTransitionEnd", function(evt) {
+                waitTransitionEnd(wrapped, dur, function() {
                     ++endCall;
                     if ( transNum === endCall ) {
-                        options.callback(evt);
-                        wrapped.unbind("webkitTransitionEnd");
+                        options.callback();
                     }
                 });
             }
@@ -86,6 +121,18 @@
         return count;
     }
 
+    function scaleJoin(xScale, yScale) {
+        return "scale(" + xScale + "," + yScale + ")";
+    }
+
+    function trnJoin(xMove, yMove) {
+        if ( typeof xMove === "number" && typeof yMove === "number" ) {
+            return open + xMove + "px," + yMove + "px" + close;
+        }
+        else if ( typeof xMove === "string" && typeof yMove === "string" ) {
+            return open + xMove + "," + yMove + close;
+        }
+    }
 
     r.fn.animate = function animate(properties, opts) {
         var count = 0, all = this.length,
@@ -105,92 +152,85 @@
     };
 
     r.fn.scale = function scale(xScale, yScale, options) {
-        this.animate(["scale(" + xScale + "," + yScale + ")" ], options);
+        this.animate([scaleJoin(xScale, yScale)], options);
     };
 
     r.fn.scaleR = function scaleR(xScale, yScale, options) {
         var current = getScale(this);
-        this.animate(["scale(" + current.x * xScale + "," + current.y * yScale + ")" ], options);
+        this.animate([scaleJoin(current.x * xScale, current.y * yScale)], options);
     };
 
     r.fn.scaleX = function scaleX(xScale, options) {
         var current = getScale(this);
-        this.animate(["scale(" + xScale + "," + current.y + ")"], options);
+        this.animate([scaleJoin(xScale, current.y)], options);
     };
 
     r.fn.scaleRX = function scaleRX(xScale, options) {
         var current = getScale(this);
-        this.animate(["scale(" + current.x * xScale + "," + current.y + ")"], options);
+        this.animate([scaleJoin(current.x * xScale, current.y)], options);
     };
 
     r.fn.scaleY = function scaleY(xScale, options) {
         var current = getScale(this);
-        this.animate(["scale(" + current.x  + "," + yScale + ")"], options);
+        this.animate([scaleJoin(current.x, yScale)], options);
     };
 
     r.fn.scaleRY = function scaleRY(yScale, options) {
         var current = getScale(this);
-        this.animate(["scale(" + current.x  + "," + current.y * yScale + ")"], options);
+        this.animate([scaleJoin(current.x, current.y * yScale)], options);
     };
 
     r.fn.move = function move(xMove, yMove, options) {
-        if ( typeof xMove === "number" && typeof yMove === "number" ) {
-            this.animate([open + xMove + "px," + yMove + "px" + close], options);
-        }
-        else if ( typeof xMove === "string" && typeof yMove === "string" ) {
-            this.animate([open + xMove + "," + yMove + close], options);
-        }
+        this.animate([trnJoin(xMove, yMove)], options);
     };
 
     r.fn.moveR = function moveR(xMove, yMove, options) {
         var current = getTranslate(this), rx = current.x + xMove, ry = current.y + yMove;
-        this.animate([open + rx + "px," + ry + "px" + close], options);
+        this.animate([trnJoin(rx, ry)], options);
     };
 
     r.fn.moveX = function moveX(xMove, options) {
         var current = getTranslate(this);
-        if ( typeof xMove === "number" ) {
-            this.animate([open + xMove + "px," + current.y + "px" + close], options);
-        }
-        else if ( typeof xMove === "string" ) {
-            this.animate([open + xMove + "," + current.y + close], options);
-        }
+        this.animate([trnJoin(xMove, current.y)], options);
     };
 
     r.fn.moveRX = function moveRX(xMove, yMove, options) {
         var current = getTranslate(this), rx = current.x + xMove;
-        this.animate([open + rx + "px," + current.y + "px" + close], options);
+        this.animate([trnJoin(rx, current.y)], options);
     };
 
     r.fn.moveY = function moveY(yMove, options) {
         var current = getTranslate(this);
-        if ( typeof yMove === "number" ) {
-            this.animate([open + current.x + "px," + yMove  + "px" + close], options);
-        }
-        else if ( typeof yMove === "string" ) {
-            this.animate([open + current.x + "px," + yMove + close], options);
-        }
+        this.animate([trnJoin(current.x, yMove)], options);
     };
 
     r.fn.moveRY = function moveRY(yMove, options) {
         var current = getTranslate(this), ry = current.y + yMove;
-        this.animate([open + current.x + "px," + ry + "px" + close], options);
+        this.animate([trnJoin(current.x, ry)], options);
     };
 
     r.fn.fadeIn = function fadeIn(options) {
-        this.animate({ opacity: 1 }, options);
+        var that = this;
+        this.show();
+        setTimeout(function() {
+            that.animate({ opacity: 1 }, options);
+        }, 0);
     };
 
     r.fn.fadeOut = function fadeOut(options) {
+        var that = this;
         this.animate({ opacity: 0 }, options);
+        waitTransitionEnd(this, options.duration || "0.3s", function() {
+            that.hide();
+        }, true);
     };
 
     r.fn.show = function show(options) {
-        this.animate({ "visibility": "visible" }, options);
+        this.animate({ "display": "block" }, options);
     };
 
     r.fn.hide = function hide(options) {
-        this.animate({ "visibility": "hidden" }, options);
+        this.animate({ "display": "none" }, options);
     };
 
 })();
