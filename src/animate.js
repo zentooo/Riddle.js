@@ -45,25 +45,6 @@
         }
     }
 
-    function waitTransitionEnd(wrapped, duration, callback, unbind) {
-        var cb, timerId;
-
-        duration = duration || DEFAULT_DURATION;
-
-        cb = function(evt, id) {
-            clearTimeout(id);
-            callback();
-            if ( unbind ) {
-                wrapped.unbind("webkitTransitionEnd");
-            }
-        };
-
-        timerId = setTimeout(function() {
-            cb(null, timerId);
-        }, asMilliSecond(duration) + 200);
-
-        wrapped.bind("webkitTransitionEnd", cb);
-    }
 
     function single(wrapped, properties, options) {
         var opts = options || {},
@@ -81,10 +62,8 @@
             transNum = copy(properties, cssParams);
         }
 
-        console.dir(opts);
-
         if ( typeof options.callback === "function" ) {
-            waitTransitionEnd(wrapped, dur, function() {
+            wrapped.waitTransitionEnd(dur, function() {
                 ++endCall;
                 if ( transNum === endCall ) {
                     options.callback();
@@ -207,7 +186,7 @@
     r.fn.fadeOut = function fadeOut(options) {
         var that = this;
         this.animate({ opacity: 0 }, options);
-        waitTransitionEnd(this, (typeof options === "object") ? options.duration : null, function() {
+        this.waitTransitionEnd((typeof options === "object") ? options.duration : null, function() {
             that.hide();
         }, true);
     };
@@ -218,6 +197,26 @@
 
     r.fn.hide = function hide(options) {
         this.animate({ "display": "none" }, options);
+    };
+
+    r.fn.waitTransitionEnd = function waitTransitionEnd(duration, callback, unbind) {
+        var that = this, cb, timerId;
+
+        duration = duration || DEFAULT_DURATION;
+
+        cb = function(evt, id) {
+            clearTimeout(id);
+            callback();
+            if ( unbind ) {
+                that.unbind("webkitTransitionEnd");
+            }
+        };
+
+        timerId = setTimeout(function() {
+            cb(null, timerId);
+        }, asMilliSecond(duration) + 200);
+
+        that.bind("webkitTransitionEnd", cb);
     };
 
 })();
