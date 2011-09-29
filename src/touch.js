@@ -2,7 +2,6 @@ r(function() {
 
     var body = document.body,
         moveThreshold = 30,
-        touchEvents = ["swipeleft", "swiperight", "swipeup", "swipedown"],
         SCROLL_BOOST = 1.6,
         touch = {};
 
@@ -28,7 +27,7 @@ r(function() {
     r(body).bind("touchmove", function(evt) {
         var dx = evt.changedTouches[0].clientX - touch.position.x,
             dy = evt.changedTouches[0].clientY - touch.position.y,
-            scroll = calcScroll(dx, dy);
+            scroll = calcScroll(evt.target, dx, dy);
 
         trigger(touch.target, "drag", SCROLL_BOOST * scroll.x, SCROLL_BOOST * scroll.y);
 
@@ -76,14 +75,8 @@ r(function() {
         touch = { x1: 0, x2: 0, y1: 0, y2: 0, target: null };
     }, true);
 
-    touchEvents.forEach(function(event) {
-        r.fn[event] = function(callback, useCapture) {
-            this.bind(event, callback, useCapture);
-        };
-    });
-
-    function calcScroll(dx, dy) {
-        var pos = parseMatrix(r(touch.target).css("-webkit-transform"));
+    function calcScroll(target, dx, dy) {
+        var pos = parseMatrix(r(target).css("-webkit-transform"));
         return { x: pos.x + dx, y: pos.y + dy };
     }
 
