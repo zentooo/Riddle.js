@@ -33,7 +33,7 @@
     }
 
     function asMilliSecond(duration) {
-        var m = duration.match(/(\d+(?:\.\d+)?)(m?)(s?)/);
+        var m = String(duration).match(/(\d+(?:\.\d+)?)(m?)(s?)/);
         if ( m[2] === "" && m[3] === "s" ) {
             return Number(m[1]) * 1000;
         }
