@@ -263,7 +263,9 @@
     */
     function remove() {
         this.forEach(function(elem) {
-            elem.parentNode.removeChild(elem);
+            if ( elem.parentNode === "object" ) {
+                elem.parentNode.removeChild(elem);
+            }
         });
         return this;
     }
@@ -722,4 +724,4 @@
 
     window.r = r;
 
- })(document, Array.prototype.slice, encodeURIComponent);
+})(document, Array.prototype.slice, encodeURIComponent);
