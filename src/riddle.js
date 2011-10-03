@@ -263,7 +263,7 @@
     */
     function remove() {
         this.forEach(function(elem) {
-            if ( elem.parentNode === "object" ) {
+            if ( elem.parentNode instanceof HTMLElement ) {
                 elem.parentNode.removeChild(elem);
             }
         });
