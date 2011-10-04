@@ -111,6 +111,7 @@
         removeClass: removeClass,
         hasClass: hasClass,
         swapClass: swapClass,
+        toggleClass: toggleClass,
 
         // event
         bind: bind,
@@ -505,6 +506,23 @@
         this.addClass(to);
     }
 
+    /**
+     * toggle two class
+     * @name toggleClass
+     * @function
+     * @memberOf r.fn
+     * @param classA {string}
+     * @param classB {string}
+    */
+    function toggleClass(classA, classB) {
+        if (this.hasClass(classA)) {
+            this.removeClass(classA);
+            this.addClass(classB);
+        } else {
+            this.removeClass(classB);
+            this.addClass(classA);
+        }
+    }
 
     // event handling
 
