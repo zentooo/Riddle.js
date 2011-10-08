@@ -38,7 +38,7 @@
         else if ( first instanceof Array ) {
             return wrap(first);
         }
-        else if ( first instanceof HTMLElement ) {
+        else if ( typeof first.addEventListener === "function" ) {
             return wrap(elementAsArray(first));
         }
         else if ( typeof first === "function" ) {
@@ -54,7 +54,7 @@
     }
 
     function queryWithContext(selector, context, functionName) {
-        if ( typeof context === "undefined" || context instanceof HTMLElement ) {
+        if ( context === void 0 || context instanceof HTMLElement ) {
             return wrap(elementAsArray((context || doc)[functionName](selector)));
         }
         else if ( context.__proto__ === r.fn ) {
@@ -71,7 +71,7 @@
     }
 
     function elementAsArray(el) {
-        if ( el === null ) {
+        if ( el === null || el === void 0 ) {
             return [];
         }
         else if ( el instanceof HTMLElement ) {
@@ -218,7 +218,7 @@
     function html(item) {
         var outers;
 
-        if ( typeof item === "undefined" ) {
+        if ( item === void 0 ) {
             if ( this.length === 1 ) {
                 return this[0].innerHTML;
             }
@@ -341,7 +341,7 @@
     */
     function attr(first, second) {
         if ( typeof first === "string" ) {
-            if ( typeof second === "undefined" ) {
+            if ( second === void 0 ) {
                 if ( this.length === 1 ) {
                     return this[0].getAttribute(first);
                 }
@@ -402,7 +402,7 @@
     */
     function css(first, second) {
         if ( typeof first === "string" ) {
-            if ( typeof second === "undefined" ) {
+            if ( second === void 0 ) {
                 if ( this.length === 1 ) {
                     return getComputedStyle(this[0], null).getPropertyValue(first);
                 }
@@ -509,7 +509,7 @@
     // event handling
 
     function getNodeId(elem) {
-        return elem.nid || (elem.nid = nodeId++);
+        return elem.__nid || (elem.__nid = nodeId++);
     }
 
     function findBoundsByEvent(bounds, event) {
@@ -590,15 +590,6 @@
 
     // ajax
 
-    function encode(obj) {
-        var set = [], key;
-
-        for ( key in obj ) {
-            set.push(enc(key) + "=" + enc(obj[key]));
-        }
-
-        return set.join("&");
-    }
 
     /**
      * send XMLHttpRequest to given URL to get data
@@ -630,7 +621,7 @@
      *   },
      * });
     */
-    function ajax(url, success, error, options) {
+    r.ajax = function ajax(url, success, error, options) {
         var xhr = new XMLHttpRequest(),
             options = options || {},
             success = success || function() {},
@@ -667,7 +658,17 @@
         }
 
         xhr.send(data);
-    }
+
+        function encode(obj) {
+            var set = [], key;
+
+            for ( key in obj ) {
+                set.push(enc(key) + "=" + enc(obj[key]));
+            }
+
+            return set.join("&");
+        }
+    };
 
 
     // shorthand and fast query
@@ -681,9 +682,9 @@
      * @param context [HTMLElement]
      * @return NodeArray
     */
-    function id(identifier, context) {
+    r.id = function id(identifier, context) {
         return queryWithContext(identifier, context, "getElementById");
-    }
+    };
 
     /**
      * select elements by class and wrap it as NodeArray
@@ -694,9 +695,9 @@
      * @param context [HTMLElement]
      * @return NodeArray
     */
-    function cls(name, context) {
+    r.cls = function cls(name, context) {
         return queryWithContext(name, context, "getElementsByClassName");
-    }
+    };
 
     /**
      * select elements by tag name and wrap it as NodeArray
@@ -707,18 +708,19 @@
      * @param context [HTMLElement]
      * @return NodeArray
     */
-    function tag(name, context) {
+    r.tag = function tag(name, context) {
         return queryWithContext(name, context, "getElementsByTagName");
-    }
+    };
 
-
-    // add public method to r
-
-    r.id = id;
-    r.cls = cls;
-    r.tag = tag;
-
-    r.ajax = ajax;
+    /**
+     * check if given object is wrapped by r.fn
+     * @name isR
+     * @function
+     * @memberOf r
+     * @param obj {object}
+     * @return Boolean
+    */
+    r.isR = function isR(obj) { return obj.__proto__ === r.fn; };
 
     r.version = "0.2.9";
 

@@ -4,3 +4,8 @@
 * drag with touch.js?
 * docs
 * animate duration bug?
+* add connection management for r.ajax?
+* adjacentHTML functionality to add?
+* add new features to touch.js like pinch rotation
+* recache with id, cls and tag?
+* add timer throttle?
