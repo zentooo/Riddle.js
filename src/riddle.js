@@ -103,6 +103,7 @@
      * @class base class of HTMLElement Array collected by selector.
     */
     r.fn = {
+<<<<<<< HEAD
         /**
          * Get the first Element which returns true with given predicate
          * @name detect
@@ -200,6 +201,137 @@
                         return html;
                     });
                 }
+=======
+        // Array++
+        detect: detect,
+        invoke: invoke,
+        pluck: pluck,
+        each: each,
+
+        // DOM
+        html: html,
+        add: add,
+        remove: remove,
+
+        // attribute
+        attr: attr,
+        css: css,
+        addClass: addClass,
+        removeClass: removeClass,
+        hasClass: hasClass,
+        swapClass: swapClass,
+        toggleClass: toggleClass,
+
+        // event
+        bind: bind,
+        unbind: unbind,
+        delegate: delegate
+    };
+
+    doc.addEventListener("DOMContentLoaded", function(e) {
+        domLoaded = true;
+    }, false);
+
+    r.fn.__proto__ = [];
+
+
+    // Array++
+
+    /**
+     * Get the first Element which returns true with given predicate
+     * @name detect
+     * @function
+     * @memberOf r.fn
+     * @param pred {function}
+     * @return {HTMLElement} HTMLElement if found
+     * @example
+     * var apple = r("select#fruits option").detect(function(option) { return option.value === "apple"; });
+    */
+    function detect(pred) {
+        return this.filter(pred)[0];
+    }
+
+    /**
+     * Invoke function for each element and produce result Array
+     * @name invoke
+     * @function
+     * @memberOf r.fn
+     * @param functionName {string}
+     * @return {Array} Array of produced results
+    */
+    function invoke() {
+        var args = toArray.call(arguments), func = args.shift();
+        return this.map(function(item) {
+            return item[func].apply(item, args);
+        });
+    }
+
+    /**
+     * Collect properties of all elements with given key
+     * @name pluck
+     * @function
+     * @memberOf r.fn
+     * @param key {string}
+     * @return {Array} Array of properties
+     * @example
+     * var values = r("select#fruits option").pluck("value");
+    */
+    function pluck(key) {
+        return this.map(function(item) {
+            return item[key];
+        });
+    }
+
+    /**
+     * iterate with auto-wrapping
+     * @name each
+     * @function
+     * @memberOf r.fn
+     * @param f {function}
+     * @example
+     * var values = r("select#fruits option").each(function(wrapepd) { wrapped.css("color", "red"); });
+    */
+    function each(f) {
+        return this.forEach(function(el) {
+            f(wrap(elementAsArray(el)));
+        });
+    }
+
+
+    // DOM
+
+    /**
+     * <p> Get/Set innerHTML of elements </p>
+     * <ul>
+     * <li> html(): returns html: String if selector has just one element
+     * <li> html(): returns htmls: Array[String] if selector has more than two elements
+     * <li> html(str): set string as innerHTML for all elements
+     * <li> html(elem): set HTMLElement as innerHTML for all elements
+     * <li> html(nodeArray): set NodeArray as innerHTML for all elements
+     * <ul/>
+     * @name html
+     * @function
+     * @memberOf r.fn
+     * @param html {(string|HTMLElement|NodeArray)}
+     * @return {(string|Array.<string>)}
+     * @example
+     * var story = r("p#story").html();
+     * @example
+     * var colors = r("li.colors").html();
+     * @example
+     * r("li.colors").html("black");
+     * @example
+     * r("li.colors").html(document.getElementById("#my-color"));
+     * @example
+     * r("#story").html(r("li#stories"));
+    */
+    function html(item) {
+        var outers;
+
+        if ( typeof item === "undefined" ) {
+            if ( this.length === 1 ) {
+                return this[0].innerHTML;
+>>>>>>> d648b2a63a5b46e0a535afb5d0102a1e12d221e0
             }
             else {
                 if ( typeof item === "string" || typeof item === "number" ) {
@@ -423,6 +555,7 @@
             this.forEach(function(elem) {
                 ( elem.className === "" ) ? elem.className = name : elem.className += " " + name;
             });
+<<<<<<< HEAD
             return this;
         },
 
@@ -438,6 +571,93 @@
             this.forEach(function(elem) {
                 var replaced = elem.className.replace(regex, "");
                 elem.className = replaced.replace(/\s+$/, "");
+=======
+        }
+    }
+
+    /**
+     * swap two class
+     * @name swapClass
+     * @function
+     * @memberOf r.fn
+     * @param from {string}
+     * @param to {string}
+    */
+    function swapClass(from, to) {
+        this.removeClass(from);
+        this.addClass(to);
+    }
+
+    /**
+     * toggle two class
+     * @name toggleClass
+     * @function
+     * @memberOf r.fn
+     * @param classA {string}
+     * @param classB {string}
+    */
+    function toggleClass(classA, classB) {
+        if (this.hasClass(classA)) {
+            this.removeClass(classA);
+            this.addClass(classB);
+        } else {
+            this.removeClass(classB);
+            this.addClass(classA);
+        }
+    }
+
+    // event handling
+
+    function getNodeId(elem) {
+        return elem.nid || (elem.nid = nodeId++);
+    }
+
+    function findBoundsByEvent(bounds, event) {
+        return bounds.filter(function(bound) {
+            return bound.event === event;
+        });
+    }
+
+    /**
+     * bind callback function to elements
+     * @name bind
+     * @function
+     * @memberOf r.fn
+     * @param event {string}
+     * @param callback {function(e: Object)}
+     * @param useCapture {?boolean}
+     * @example
+     * r("#button").bind("click", function(e) {
+     *   alert("button clicked on" + e.target.tagName);
+     * });
+    */
+    function bind(event, callback, useCapture) {
+        this.forEach(function(elem) {
+            var id = getNodeId(elem),
+            bounds = listeners[id] || (listeners[id] = []);
+            bounds.push( { event: event, callback: callback, index: bounds.length } );
+            elem.addEventListener(event, callback, useCapture || false);
+        });
+        return this;
+    }
+
+    /**
+     * unbind alreaedy-bound callback function from elements
+     * @name unbind
+     * @function
+     * @memberOf r.fn
+     * @param event {string}
+     * @example
+     * r("#button").unbind("click");
+    */
+    function unbind(event) {
+        this.forEach(function(elem) {
+            var id = getNodeId(elem),
+            bounds = event ? findBoundsByEvent(listeners[id], event) : listeners[id];
+            bounds && bounds.forEach(function(bound) {
+                delete bounds[bound.index];
+                elem.removeEventListener(bound.event, bound.callback, false);
+>>>>>>> d648b2a63a5b46e0a535afb5d0102a1e12d221e0
             });
             return this;
         },
