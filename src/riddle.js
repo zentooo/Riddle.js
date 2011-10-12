@@ -507,7 +507,7 @@
             this.forEach(function(elem) {
                 var id = getNodeId(elem),
                 bounds = listeners[id] || (listeners[id] = []);
-                bounds.push( { event: event, callback: callback, index: bounds.length } );
+                bounds.push( { event: event, callback: callback, index: bounds.length, useCapture: useCapture || false } );
                 elem.addEventListener(event, callback, useCapture || false);
             });
             return this;
@@ -533,7 +533,7 @@
                 bounds = event ? findBoundsByEvent(listeners[id], event) : listeners[id];
                 bounds && bounds.forEach(function(bound) {
                     delete bounds[bound.index];
-                    elem.removeEventListener(bound.event, bound.callback, false);
+                    elem.removeEventListener(bound.event, bound.callback, bound.useCapture);
                 });
             });
             return this;
