@@ -1,3 +1,4 @@
+* fix unbind bug for missing handler
 * about __proto__ property
 * make performance profile
 * drag with touch.js?
