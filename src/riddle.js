@@ -42,7 +42,7 @@
         else if ( first instanceof Array ) {
             return wrap(first);
         }
-        else if ( typeof first.addEventListener === "function" ) {
+        else if ( typeof first === "object" && typeof first.addEventListener === "function" ) {
             return wrap(elementAsArray(first));
         }
         else if ( typeof first === "function" ) {
