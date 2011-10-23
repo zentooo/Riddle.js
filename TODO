@@ -1,3 +1,6 @@
+* fix unbind bug for missing handler
+* write how to run tests
+
 * about __proto__ property
 * make performance profile
 * drag with touch.js?
