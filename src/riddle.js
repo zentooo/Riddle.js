@@ -42,7 +42,7 @@
         else if ( first instanceof Array ) {
             return wrap(first);
         }
-        else if ( typeof first.addEventListener === "function" ) {
+        else if ( typeof first === "object" && first !== null && typeof first.addEventListener === "function" ) {
             return wrap(elementAsArray(first));
         }
         else if ( typeof first === "function" ) {
@@ -530,7 +530,7 @@
             }
             this.forEach(function(elem) {
                 var id = getNodeId(elem),
-                bounds = event ? findBoundsByEvent(listeners[id], event) : listeners[id];
+                bounds = event ? findBoundsByEvent(listeners[id] || [], event) : listeners[id];
                 bounds && bounds.forEach(function(bound) {
                     delete bounds[bound.index];
                     elem.removeEventListener(bound.event, bound.callback, bound.useCapture);
