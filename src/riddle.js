@@ -488,6 +488,7 @@
                     this.addClass(classA);
                 }
             }
+            return this;
         },
 
         /**
@@ -562,6 +563,7 @@
                     callback.call(match, evt);
                 }
             });
+            return this;
         }
     };
 
