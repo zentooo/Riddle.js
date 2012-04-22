@@ -639,8 +639,12 @@
     */
     r.isR = function(obj) { return obj.__proto__ === r.fn; };
 
-
     r.version = "0.4.0";
     global.r = r;
-
-})(this, document, Array.isArray, Array.prototype.slice, encodeURIComponent);
+})(
+    this,
+    document,
+    Array.isArray,
+    Array.prototype.slice,
+    encodeURIComponent
+);
