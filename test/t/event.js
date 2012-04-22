@@ -107,24 +107,21 @@ test("r.fn.unbind for all", function() {
 });
 
 
-test("r.fn.delegate", function() {
-    var wrapperDiv = r(document.createElement("div"));
-    var newButton = r(document.createElement("button"));
+test("r.fn.trigger", function() {
+    var button = r("#button5"),
+        clickSpy = sinon.spy(function() {}),
+        focusSpy = sinon.spy(function() {});
+        blurSpy = sinon.spy(function() {});
 
-    var clickSpy = sinon.spy(function(evt) {
-        is ( evt.target, newButton[0] );
-        is ( this, wrapperDiv[0] );
-    });
+    button.bind("click", clickSpy);
+    button.bind("focus", clickSpy);
+    button.bind("blur", clickSpy);
 
-    r(document.body).delegate(".button-wrapper", "click", clickSpy);
+    button.trigger("click");
+    button.trigger("focus");
+    button.trigger("blur");
 
-    wrapperDiv.addClass("button-wrapper");
-    wrapperDiv.add(newButton);
-    document.body.appendChild(wrapperDiv[0]);
-
-    emit(document.body, "click");
-    ok( ! clickSpy.called, "callback not called");
-
-    emit(newButton, "click");
-    ok( clickSpy.called, "callback called with delegate");
+    ok(clickSpy.called, "click triggered");
+    ok(focusSpy.called, "focus triggered");
+    ok(blurSpy.called, "blur triggered");
 });

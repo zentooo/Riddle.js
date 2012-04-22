@@ -1,5 +1,5 @@
 /** @license Naosuke Yokoe - http://github.com/zentooo/Riddle.js - MIT Licensed */
-(function(global, doc, isArray, toArray, enc) {
+(function(global, doc, isArray, toArray, enc, undefined) {
     'use strict';
 
     r.listeners = {};
@@ -160,7 +160,7 @@
         html: function(item) {
             var outers;
 
-            if ( item === void 0 ) {
+            if ( item === undefined ) {
                 return this[0].innerHTML;
             }
             else {
@@ -269,7 +269,7 @@
         */
         attr: function(first, second) {
             if ( typeof first === "string" ) {
-                if ( second === void 0 ) {
+                if ( second === undefined ) {
                     return this[0].getAttribute(first);
                 }
                 else {
@@ -325,7 +325,7 @@
         */
         css: function(first, second) {
             if ( typeof first === "string" ) {
-                if ( second === void 0 ) {
+                if ( second === undefined ) {
                     return getComputedStyle(this[0], null).getPropertyValue(first);
                 }
                 else {
@@ -495,7 +495,7 @@
             var evt = doc.createEvent("Event");
             evt.initEvent(eventName, true, true);
             this.forEach(function(elem) {
-                elem.dispatchEvent(event);
+                elem.dispatchEvent(evt);
             });
             return this;
         }
