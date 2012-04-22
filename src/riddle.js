@@ -1,12 +1,13 @@
 /** @license Naosuke Yokoe - http://github.com/zentooo/Riddle.js - MIT Licensed */
-(function(doc, toArray, enc) {
+(function(global, doc, isArray, toArray, enc) {
+    'use strict';
 
-    var listeners = {},
-        nodeId = 1,
-        domLoaded = false;
+    r.listeners = {};
+    r.__nid = 1;
+    r.domReady = false;
 
     doc.addEventListener("DOMContentLoaded", function(e) {
-        domLoaded = true;
+        r.domReady = true;
     }, false);
 
     /**
@@ -37,16 +38,16 @@
     */
     function r(first, second) {
         if ( typeof first === "string" ) {
-            return queryWithContext(first, second, "querySelectorAll");
-        }
-        else if ( first instanceof Array ) {
-            return wrap(first);
+            return wrap(toArray.call((second || doc).querySelectorAll(first)));
         }
         else if ( typeof first === "object" && first !== null && typeof first.addEventListener === "function" ) {
-            return wrap(elementAsArray(first));
+            return wrap([first]);
+        }
+        else if ( isArray(first) ) {
+            return wrap(first);
         }
         else if ( typeof first === "function" ) {
-            if ( domLoaded ) {
+            if ( r.domReady ) {
                 first(r);
             }
             else {
@@ -54,36 +55,7 @@
                     first(r);
                 }, false);
             }
-        }
-    }
-
-    function queryWithContext(selector, context, functionName) {
-        var result = [];
-
-        if ( context === void 0 || context instanceof HTMLElement ) {
-            return wrap(elementAsArray((context || doc)[functionName](selector)));
-        }
-        else if ( r.isR(context) ) {
-            context.map(function(el) {
-                return elementAsArray(el[functionName](selector));
-            }).forEach(function(array) {
-                array.forEach(function(el) {
-                    result.push(el);
-                });
-            });
-            return wrap(result);
-        }
-    }
-
-    function elementAsArray(el) {
-        if ( el === null || el === void 0 ) {
-            return [];
-        }
-        else if ( el instanceof HTMLElement ) {
-            return [el];
-        }
-        else if ( typeof el.length === "number" && typeof el.item === "function" ) {
-            return toArray.call(el);
+            r.init = first;
         }
     }
 
@@ -92,9 +64,6 @@
         return ary;
     }
 
-    function getNodeId(elem) {
-        return elem.__nid || (elem.__nid = nodeId++);
-    }
 
 
     /**
@@ -113,7 +82,7 @@
          * @example
          * var apple = r("select#fruits option").detect(function(option) { return option.value === "apple"; });
         */
-        detect: function detect(pred) {
+        detect: function(pred) {
             return this.filter(pred)[0];
         },
 
@@ -125,7 +94,7 @@
          * @param functionName {string}
          * @return {Array} Array of produced results
         */
-        invoke: function invoke() {
+        invoke: function() {
             var args = toArray.call(arguments), func = args.shift();
             return this.map(function(item) {
                 return item[func].apply(item, args);
@@ -142,7 +111,7 @@
          * @example
          * var values = r("select#fruits option").pluck("value");
         */
-        pluck: function pluck(key) {
+        pluck: function(key) {
             return this.map(function(item) {
                 return item[key];
             });
@@ -157,9 +126,9 @@
          * @example
          * var values = r("select#fruits option").each(function(wrapepd) { wrapped.css("color", "red"); });
         */
-        each: function each(f) {
+        each: function(f) {
             return this.forEach(function(el) {
-                f(wrap(elementAsArray(el)));
+                f(wrap([el]));
             });
         },
 
@@ -188,7 +157,7 @@
          * @example
          * r("#story").html(r("li#stories"));
         */
-        html: function html(item) {
+        html: function(item) {
             var outers;
 
             if ( item === void 0 ) {
@@ -234,7 +203,7 @@
          * @example
          * r("#mami .head").remove();
         */
-        remove: function remove() {
+        remove: function() {
             this.forEach(function(elem) {
                 if ( elem.parentNode instanceof HTMLElement ) {
                     elem.parentNode.removeChild(elem);
@@ -256,7 +225,7 @@
          * @example
          * r("#madoka").add("homuhomu");
         */
-        add: function add(item, position) {
+        add: function(item, position) {
             var fragment;
 
             if ( typeof item === "string" ) {
@@ -309,7 +278,7 @@
          * @example
          * r(".links-change").attr( { href: null } );
         */
-        attr: function attr(first, second) {
+        attr: function(first, second) {
             if ( typeof first === "string" ) {
                 if ( second === void 0 ) {
                     if ( this.length === 1 ) {
@@ -370,7 +339,7 @@
          * @example
          * r(".monster").css( { visibility: null } );
         */
-        css: function css(first, second) {
+        css: function(first, second) {
             if ( typeof first === "string" ) {
                 if ( second === void 0 ) {
                     if ( this.length === 1 ) {
@@ -419,9 +388,15 @@
          * @memberOf r.fn
          * @param className {string}
         */
-        addClass: function addClass(name) {
+        addClass: function(name) {
             this.forEach(function(elem) {
-                ( elem.className === "" ) ? elem.className = name : elem.className += " " + name;
+                var currents;
+                if ( r(elem).hasClass(name) ) {
+                    return;
+                }
+                currents = elem.className.split(" ");
+                currents.push(name);
+                elem.className = currents.join(" ");
             });
             return this;
         },
@@ -433,11 +408,12 @@
          * @memberOf r.fn
          * @param className {string}
         */
-        removeClass: function removeClass(name) {
-            var regex = new RegExp("(?:^|\\b)" + name + "(?:\\b|$)\\s?", "g");
+        removeClass: function(name) {
             this.forEach(function(elem) {
-                var replaced = elem.className.replace(regex, "");
-                elem.className = replaced.replace(/\s+$/, "");
+                var currents = elem.className.split(" ");
+                elem.className = currents.filter(function(c) {
+                    return c !== name;
+                }).join(" ");
             });
             return this;
         },
@@ -450,16 +426,9 @@
          * @param className {string}
          * @return {(boolean|Array.<boolean>)}
         */
-        hasClass: function hasClass(name) {
+        hasClass: function(name) {
             var regex = new RegExp("(?:^|\\b)" + name + "(?:\\b|$)");
-            if ( this.length === 1 ) {
-                return !!this[0].className.match(regex);
-            }
-            else {
-                return this.map(function(el) {
-                    return !!el.className.match(regex);
-                });
-            }
+            return !!this[0].className.match(regex);
         },
 
         /**
@@ -470,7 +439,7 @@
          * @param classA {string}
          * @param classB {string}
         */
-        toggleClass: function toggleClass(classA, classB) {
+        toggleClass: function(classA, classB) {
             if ( classB === void 0 ) {
                 if ( this.hasClass(classA) ) {
                     this.removeClass(classA);
@@ -495,7 +464,7 @@
          * @name bind
          * @function
          * @memberOf r.fn
-         * @param event {string}
+         * @param events {string}
          * @param callback {function(e: Object)}
          * @param useCapture {?boolean}
          * @example
@@ -503,12 +472,21 @@
          *   alert("button clicked on" + e.target.tagName);
          * });
         */
-        bind: function bind(event, callback, useCapture) {
+        bind: function(eventNames, callback, useCapture) {
+            var events = eventNames.split(" ");
+
             this.forEach(function(elem) {
-                var id = getNodeId(elem),
-                bounds = listeners[id] || (listeners[id] = []);
-                bounds.push( { event: event, callback: callback, index: bounds.length, useCapture: useCapture || false } );
-                elem.addEventListener(event, callback, useCapture || false);
+                var id = r.nodeId(elem),
+                bounds = r.listeners[id] || (r.listeners[id] = []);
+                events.forEach(function(event) {
+                    bounds.push({
+                        event: event,
+                        callback: callback,
+                        index: bounds.length,
+                        useCapture: useCapture || false
+                    });
+                    elem.addEventListener(event, callback, useCapture || false);
+                });
             });
             return this;
         },
@@ -522,15 +500,15 @@
          * @example
          * r("#button").unbind("click");
         */
-        unbind: function unbind(event) {
+        unbind: function(event) {
             function findBoundsByEvent(bounds, event) {
                 return bounds.filter(function(bound) {
                     return bound.event === event;
                 });
             }
             this.forEach(function(elem) {
-                var id = getNodeId(elem),
-                bounds = event ? findBoundsByEvent(listeners[id] || [], event) : listeners[id];
+                var id = r.nodeId(elem),
+                bounds = event ? findBoundsByEvent(r.listeners[id] || [], event) : r.listeners[id];
                 bounds && bounds.forEach(function(bound) {
                     delete bounds[bound.index];
                     elem.removeEventListener(bound.event, bound.callback, bound.useCapture);
@@ -540,28 +518,21 @@
         },
 
         /**
-         * delegate event handling
-         * @name delegate
+         * trigger events
+         * @name trigger
          * @function
-         * @memberOf r
-         * @param selector {string}
+         * @memberOf r.fn
          * @param event {string}
-         * @param callback {function(e: Object)}
          * @example
-         * r(document.body).delegate(".button", "click", function(e) {
-         *   alert("button clicked on" + e.target.tagName);
-         * });
+         * r("#button").trigger("click");
         */
-        delegate: function delegate(selector, event, callback) {
-            this.bind(event, function(evt) {
-                var match = r(selector, this).detect(function(el) {
-                    var res = el.compareDocumentPosition(evt.target);
-                    return (res === 0 || (res & Node.DOCUMENT_POSITION_CONTAINED_BY));
-                });
-                if ( match ) {
-                    callback.call(match, evt);
-                }
+        trigger: function(eventName) {
+            var evt = doc.createEvent("Event");
+            evt.initEvent(eventName, true, true);
+            this.forEach(function(elem) {
+                elem.dispatchEvent(event);
             });
+            return this;
         }
     };
 
@@ -598,7 +569,7 @@
      *   },
      * });
     */
-    r.ajax = function ajax(url, success, error, options) {
+    r.ajax = function(url, success, error, options) {
         var xhr = new XMLHttpRequest(),
             options = options || {},
             success = success || function() {},
@@ -635,14 +606,13 @@
         }
 
         xhr.send(data);
+        return xhr;
 
         function encode(obj) {
             var set = [], key;
-
             for ( key in obj ) {
                 set.push(enc(key) + "=" + enc(obj[key]));
             }
-
             return set.join("&");
         }
     };
@@ -659,8 +629,9 @@
      * @param context [HTMLElement]
      * @return NodeArray
     */
-    r.id = function id(identifier, context) {
-        return queryWithContext(identifier, context, "getElementById");
+    r.id = function(identifier, context) {
+        var elem = (context || doc).getElementById(identifier);
+        return elem ? wrap([elem]) : wrap([]);
     };
 
     /**
@@ -672,8 +643,8 @@
      * @param context [HTMLElement]
      * @return NodeArray
     */
-    r.cls = function cls(name, context) {
-        return queryWithContext(name, context, "getElementsByClassName");
+    r.cls = function(name, context) {
+        return wrap((context || doc).getElementsByClassName(name));
     };
 
     /**
@@ -685,8 +656,12 @@
      * @param context [HTMLElement]
      * @return NodeArray
     */
-    r.tag = function tag(name, context) {
-        return queryWithContext(name, context, "getElementsByTagName");
+    r.tag = function(name, context) {
+        return wrap((context || doc).getElementsByTagName(name));
+    };
+
+    r.nodeId = function(elem) {
+        return elem.__nid || (elem.__nid = r.__nid++);
     };
 
     /**
@@ -697,10 +672,10 @@
      * @param obj {object}
      * @return Boolean
     */
-    r.isR = function isR(obj) { return obj.__proto__ === r.fn; };
+    r.isR = function(obj) { return obj.__proto__ === r.fn; };
 
 
-    r.version = "0.3.0";
-    window.r = r;
+    r.version = "0.4.0";
+    global.r = r;
 
-})(document, Array.prototype.slice, encodeURIComponent);
+})(this, document, Array.isArray, Array.prototype.slice, encodeURIComponent);

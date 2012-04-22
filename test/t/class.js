@@ -46,13 +46,6 @@ test("r.fn.hasClass", function() {
 
   ok ( green.hasClass("green"), "green green again");
   ok ( green.hasClass("div"), "green got div class");
-
-  var lis = r("#div3 ul li");
-  var bools = lis.hasClass("red");
-
-  is ( bools[0], true, "first li has red class" );
-  is ( bools[1], false, "first li does not have red class" );
-  is ( bools[2], true, "first li has red class" );
 });
 
 
