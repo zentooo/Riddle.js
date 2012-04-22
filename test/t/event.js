@@ -114,8 +114,8 @@ test("r.fn.trigger", function() {
         blurSpy = sinon.spy(function() {});
 
     button.bind("click", clickSpy);
-    button.bind("focus", clickSpy);
-    button.bind("blur", clickSpy);
+    button.bind("focus", focusSpy);
+    button.bind("blur", blurSpy);
 
     button.trigger("click");
     button.trigger("focus");
