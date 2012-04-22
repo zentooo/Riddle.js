@@ -55,12 +55,4 @@ test("r.fn.toggleClass", function() {
     ok ( ! blue.hasClass("blue") );
     blue.toggleClass("blue");
     ok ( blue.hasClass("blue") );
-
-    blue.toggleClass("blue", "green");
-    ok ( blue.hasClass("green") );
-    ok ( ! blue.hasClass("blue") );
-
-    blue.toggleClass("blue", "green");
-    ok ( ! blue.hasClass("green") );
-    ok ( blue.hasClass("blue") );
 });

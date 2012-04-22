@@ -161,14 +161,7 @@
             var outers;
 
             if ( item === void 0 ) {
-                if ( this.length === 1 ) {
-                    return this[0].innerHTML;
-                }
-                else {
-                    return this.pluck("innerHTML").map(function(html) {
-                        return html;
-                    });
-                }
+                return this[0].innerHTML;
             }
             else {
                 if ( typeof item === "string" || typeof item === "number" ) {
@@ -182,16 +175,12 @@
                     });
                 }
                 else if ( r.isR(item) ) {
-                    outers = item.map(function(el) {
-                        return el.outerHTML;
-                    }).join("");
-
                     this.forEach(function(elem) {
-                        elem.innerHTML = outers;
+                        elem.innerHTML = item[0].outerHTML;
                     });
                 }
+                return this;
             }
-            return this;
         },
 
         /**
@@ -205,7 +194,7 @@
         */
         remove: function() {
             this.forEach(function(elem) {
-                if ( elem.parentNode instanceof HTMLElement ) {
+                if ( elem.parentNode ) {
                     elem.parentNode.removeChild(elem);
                 }
             });
@@ -228,7 +217,7 @@
         add: function(item, position) {
             var fragment;
 
-            if ( typeof item === "string" ) {
+            if ( typeof item === "string" || typeof item === "number" ) {
                 this.forEach(function(elem) {
                     elem.insertAdjacentHTML("beforeEnd", item);
                 });
@@ -281,12 +270,7 @@
         attr: function(first, second) {
             if ( typeof first === "string" ) {
                 if ( second === void 0 ) {
-                    if ( this.length === 1 ) {
-                        return this[0].getAttribute(first);
-                    }
-                    else {
-                        return this.invoke("getAttribute", first);
-                    }
+                    return this[0].getAttribute(first);
                 }
                 else {
                     if ( second === null ) {
@@ -342,14 +326,7 @@
         css: function(first, second) {
             if ( typeof first === "string" ) {
                 if ( second === void 0 ) {
-                    if ( this.length === 1 ) {
-                        return getComputedStyle(this[0], null).getPropertyValue(first);
-                    }
-                    else {
-                        return this.map(function(elem) {
-                            return getComputedStyle(elem, null).getPropertyValue(first);
-                        });
-                    }
+                    return getComputedStyle(this[0], null).getPropertyValue(first);
                 }
                 else {
                     if ( second === null ) {
@@ -439,23 +416,11 @@
          * @param classA {string}
          * @param classB {string}
         */
-        toggleClass: function(classA, classB) {
-            if ( classB === void 0 ) {
-                if ( this.hasClass(classA) ) {
-                    this.removeClass(classA);
-                }
-                else {
-                    this.addClass(classA);
-                }
-            }
-            else {
-                if ( this.hasClass(classA) ) {
-                    this.removeClass(classA);
-                    this.addClass(classB);
-                } else {
-                    this.removeClass(classB);
-                    this.addClass(classA);
-                }
+        toggleClass: function(name) {
+            if ( this.hasClass(name) ) {
+                this.removeClass(name);
+            } else {
+                this.addClass(name);
             }
         },
 
