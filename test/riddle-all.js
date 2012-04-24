@@ -65,58 +65,12 @@
     }
 
 
-
     /**
      * Base class of HTMLElement Array collected by selector.
      * @name r.fn
      * @class base class of HTMLElement Array collected by selector.
     */
     r.fn = {
-        /**
-         * Get the first Element which returns true with given predicate
-         * @name detect
-         * @function
-         * @memberOf r.fn
-         * @param pred {function}
-         * @return {HTMLElement} HTMLElement if found
-         * @example
-         * var apple = r("select#fruits option").detect(function(option) { return option.value === "apple"; });
-        */
-        detect: function(pred) {
-            return this.filter(pred)[0];
-        },
-
-        /**
-         * Invoke function for each element and produce result Array
-         * @name invoke
-         * @function
-         * @memberOf r.fn
-         * @param functionName {string}
-         * @return {Array} Array of produced results
-        */
-        invoke: function() {
-            var args = toArray.call(arguments), func = args.shift();
-            return this.map(function(item) {
-                return item[func].apply(item, args);
-            });
-        },
-
-        /**
-         * Collect properties of all elements with given key
-         * @name pluck
-         * @function
-         * @memberOf r.fn
-         * @param key {string}
-         * @return {Array} Array of properties
-         * @example
-         * var values = r("select#fruits option").pluck("value");
-        */
-        pluck: function(key) {
-            return this.map(function(item) {
-                return item[key];
-            });
-        },
-
         /**
          * iterate with auto-wrapping
          * @name each
@@ -158,8 +112,6 @@
          * r("#story").html(r("li#stories"));
         */
         html: function(item) {
-            var outers;
-
             if ( item === undefined ) {
                 return this[0].innerHTML;
             }
@@ -274,10 +226,14 @@
                 }
                 else {
                     if ( second === null ) {
-                        this.invoke("removeAttribute", first);
+                        this.forEach(function(elem) {
+                            elem.removeAttribute(first);
+                        });
                     }
                     else {
-                        this.invoke("setAttribute", first, String(second));
+                        this.forEach(function(elem) {
+                            elem.setAttribute(first, String(second));
+                        });
                     }
                 }
             }
@@ -639,11 +595,15 @@
     */
     r.isR = function(obj) { return obj.__proto__ === r.fn; };
 
-
     r.version = "0.4.0";
     global.r = r;
-
-})(this, document, Array.isArray, Array.prototype.slice, encodeURIComponent);
+})(
+    this,
+    document,
+    Array.isArray,
+    Array.prototype.slice,
+    encodeURIComponent
+);
 (function(global, doc, head) {
 
     function load(srcs, callback) {

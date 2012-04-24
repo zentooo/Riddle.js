@@ -59,11 +59,10 @@
         }
     }
 
-    function wrap(ary) {
+    r.wrap = function wrap(ary) {
         ary.__proto__ = r.fn;
         return ary;
-    }
-
+    };
 
 
     /**
@@ -72,66 +71,6 @@
      * @class base class of HTMLElement Array collected by selector.
     */
     r.fn = {
-        /**
-         * Get the first Element which returns true with given predicate
-         * @name detect
-         * @function
-         * @memberOf r.fn
-         * @param pred {function}
-         * @return {HTMLElement} HTMLElement if found
-         * @example
-         * var apple = r("select#fruits option").detect(function(option) { return option.value === "apple"; });
-        */
-        detect: function(pred) {
-            return this.filter(pred)[0];
-        },
-
-        /**
-         * Invoke function for each element and produce result Array
-         * @name invoke
-         * @function
-         * @memberOf r.fn
-         * @param functionName {string}
-         * @return {Array} Array of produced results
-        */
-        invoke: function() {
-            var args = toArray.call(arguments), func = args.shift();
-            return this.map(function(item) {
-                return item[func].apply(item, args);
-            });
-        },
-
-        /**
-         * Collect properties of all elements with given key
-         * @name pluck
-         * @function
-         * @memberOf r.fn
-         * @param key {string}
-         * @return {Array} Array of properties
-         * @example
-         * var values = r("select#fruits option").pluck("value");
-        */
-        pluck: function(key) {
-            return this.map(function(item) {
-                return item[key];
-            });
-        },
-
-        /**
-         * iterate with auto-wrapping
-         * @name each
-         * @function
-         * @memberOf r.fn
-         * @param f {function}
-         * @example
-         * var values = r("select#fruits option").each(function(wrapepd) { wrapped.css("color", "red"); });
-        */
-        each: function(f) {
-            return this.forEach(function(el) {
-                f(wrap([el]));
-            });
-        },
-
         /**
          * <p> Get/Set innerHTML of elements </p>
          * <ul>
@@ -158,8 +97,6 @@
          * r("#story").html(r("li#stories"));
         */
         html: function(item) {
-            var outers;
-
             if ( item === undefined ) {
                 return this[0].innerHTML;
             }
@@ -274,10 +211,14 @@
                 }
                 else {
                     if ( second === null ) {
-                        this.invoke("removeAttribute", first);
+                        this.forEach(function(elem) {
+                            elem.removeAttribute(first);
+                        });
                     }
                     else {
-                        this.invoke("setAttribute", first, String(second));
+                        this.forEach(function(elem) {
+                            elem.setAttribute(first, String(second));
+                        });
                     }
                 }
             }
@@ -441,7 +382,7 @@
             var events = eventNames.split(" ");
 
             this.forEach(function(elem) {
-                var id = r.nodeId(elem),
+                var id = nodeId(elem),
                 bounds = r.listeners[id] || (r.listeners[id] = []);
                 events.forEach(function(event) {
                     bounds.push({
@@ -472,7 +413,7 @@
                 });
             }
             this.forEach(function(elem) {
-                var id = r.nodeId(elem),
+                var id = nodeId(elem),
                 bounds = event ? findBoundsByEvent(r.listeners[id] || [], event) : r.listeners[id];
                 bounds && bounds.forEach(function(bound) {
                     delete bounds[bound.index];
@@ -625,7 +566,7 @@
         return wrap((context || doc).getElementsByTagName(name));
     };
 
-    r.nodeId = function(elem) {
+    r.nodeId = function nodeId(elem) {
         return elem.__nid || (elem.__nid = r.__nid++);
     };
 
@@ -644,7 +585,7 @@
 })(
     this,
     document,
-    Array.isArray,
+    Array.isArray || function(a) { return a instanceof Array },
     Array.prototype.slice,
     encodeURIComponent
 );
