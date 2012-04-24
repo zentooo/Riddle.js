@@ -125,3 +125,19 @@ test("r.fn.trigger", function() {
     ok(focusSpy.called, "focus triggered");
     ok(blurSpy.called, "blur triggered");
 });
+
+test("r.fn.bind (multiple)", function() {
+  var button = r("#button6");
+  var spy = sinon.spy();
+
+  button.bind("click focus", spy);
+  emit(button, "click");
+  emit(button, "focus");
+  ok(spy.calledTwice, "click and trigger bind");
+
+  button.unbind("click");
+  button.unbind("focus");
+  emit(button, "click");
+
+  ok(spy.calledTwice, "click and trigger unbind");
+});

@@ -4,8 +4,6 @@ is = strictEqual;
 
 Deferred.define();
 
-var spy = sinon.spy(r.ajax);
-
 
 // helper functions
 function simpleServer() {
@@ -134,10 +132,31 @@ next(function() {
 
 next(function() {
   asyncTest("test with ctype option", function() {
-
     testOption( { ctype: "application/json" }, function(server) {
       is( server.requests[0].requestHeaders["Content-Type"], "application/json" );
     });
+  });
+});
 
+next(function() {
+  asyncTest("r.get", function() {
+      var server = simpleServer();
+      r.get("test.html", { foo: "bar" }, function() {
+          is( server.requests[0].requestHeaders["X-Requested-With"], "XMLHttpRequest" );
+          start();
+      });
+      server.respond();
+  });
+});
+
+next(function() {
+  asyncTest("r.post", function() {
+      var server = simpleServer();
+      r.post("test.html", { foo: "bar" }, function() {
+          is( server.requests[0].requestHeaders["X-Requested-With"], "XMLHttpRequest" );
+          is( server.requests[0].requestBody, "foo=bar" );
+          start();
+      });
+      server.respond();
   });
 });

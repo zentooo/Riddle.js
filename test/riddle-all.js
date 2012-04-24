@@ -64,6 +64,9 @@
         return ary;
     }
 
+    function nodeId(elem) {
+        return elem.__nid || (elem.__nid = r.__nid++);
+    }
 
     /**
      * Base class of HTMLElement Array collected by selector.
@@ -71,18 +74,18 @@
      * @class base class of HTMLElement Array collected by selector.
     */
     r.fn = {
-        /**
-         * iterate with auto-wrapping
+         /**
+         * forEach with auto-wrapping
          * @name each
          * @function
          * @memberOf r.fn
          * @param f {function}
          * @example
-         * var values = r("select#fruits option").each(function(wrapepd) { wrapped.css("color", "red"); });
+         * var values = r("select#fruits option").each(function($el) { $el.css("color", "red"); });
         */
         each: function(f) {
             return this.forEach(function(el) {
-                f(wrap([el]));
+                f(r.wrap([el]));
             });
         },
 
@@ -397,7 +400,7 @@
             var events = eventNames.split(" ");
 
             this.forEach(function(elem) {
-                var id = r.nodeId(elem),
+                var id = nodeId(elem),
                 bounds = r.listeners[id] || (r.listeners[id] = []);
                 events.forEach(function(event) {
                     bounds.push({
@@ -428,7 +431,7 @@
                 });
             }
             this.forEach(function(elem) {
-                var id = r.nodeId(elem),
+                var id = nodeId(elem),
                 bounds = event ? findBoundsByEvent(r.listeners[id] || [], event) : r.listeners[id];
                 bounds && bounds.forEach(function(bound) {
                     delete bounds[bound.index];
@@ -538,6 +541,14 @@
         }
     };
 
+    r.get = function(url, data, success, error) {
+        r.ajax(url, success, error, { data: data, method: "GET" });
+    };
+
+    r.post = function(url, data, success, error) {
+        r.ajax(url, success, error, { data: data, method: "POST" });
+    };
+
 
     // shorthand and fast query
 
@@ -581,9 +592,6 @@
         return wrap((context || doc).getElementsByTagName(name));
     };
 
-    r.nodeId = function(elem) {
-        return elem.__nid || (elem.__nid = r.__nid++);
-    };
 
     /**
      * check if given object is wrapped by r.fn
@@ -595,38 +603,20 @@
     */
     r.isR = function(obj) { return obj.__proto__ === r.fn; };
 
+    r.wrap = wrap;
+    r.nodeId = nodeId;
+    r.on = r.bind;
+    r.off = r.unbind;
     r.version = "0.4.0";
+
     global.r = r;
 })(
     this,
     document,
-    Array.isArray,
+    Array.isArray || function(a) { return a instanceof Array },
     Array.prototype.slice,
     encodeURIComponent
 );
-(function(global, doc, head) {
-
-    function load(srcs, callback) {
-        var current = 0, all = srcs.length;
-
-        srcs.forEach(function(src) {
-            var script = doc.createElement("script");
-
-            script.src = src;
-            script.onload = function() {
-                script.removeAttribute("onload");
-
-                if ( ++current === all ) {
-                    callback();
-                }
-            };
-            head.appendChild(script);
-        });
-    }
-
-    global.r.load = load;
-
-})(window, document, document.getElementsByTagName("head")[0]);
 (function() {
 
     var has3d = 'WebKitCSSMatrix' in window && 'm11' in new WebKitCSSMatrix(),
@@ -849,6 +839,70 @@
     };
 
 })();
+/**
+ * map with auto-wrapping
+ * @name collect
+ * @function
+ * @memberOf r.fn
+ * @param f {function}
+*/
+r.fn.collect = function(f) {
+    return this.map(function(el) {
+        return f(r.wrap([el]));
+    });
+};
+
+/**
+ * some with auto-wrapping
+ * @name any
+ * @function
+ * @memberOf r.fn
+ * @param f {function}
+*/
+r.fn.any = function(f) {
+    return this.some(function(el) {
+        return f(r.wrap([el]));
+    });
+};
+
+/**
+ * every with auto-wrapping
+ * @name all
+ * @function
+ * @memberOf r.fn
+ * @param f {function}
+*/
+r.fn.all = function(f) {
+    return this.every(function(el) {
+        return f(r.wrap([el]));
+    });
+};
+
+/**
+ * reduce with auto-wrapping
+ * @name fold
+ * @function
+ * @memberOf r.fn
+ * @param f {function}
+*/
+r.fn.fold = function(f, i) {
+    return this.reduce(function(el) {
+        return f(r.wrap([el]));
+    }, i);
+};
+
+/**
+ * reduceRight with auto-wrapping
+ * @name fold
+ * @function
+ * @memberOf r.fn
+ * @param f {function}
+*/
+r.fn.foldRight = function(f, i) {
+    return this.reduceRight(function(el) {
+        return f(r.wrap([el]));
+    }, i);
+};
 (function() {
     /**
      * delegate event handling
@@ -1087,73 +1141,3 @@ r(function() {
         }
     }
 });
-(function() {
-
-    function RStorage(storage) {
-        this.storage = storage;
-    }
-
-    function set(key, value) {
-        if ( typeof key === "number" || typeof key === "string" ) {
-            this.storage.setItem(key, JSON.stringify(value));
-        }
-        else if ( typeof value === "undefined" ) {
-            throw Error("typeof value is 'undefined'. Maybe you're doing something wrong");
-        }
-        else {
-            throw Error("Given value as key is OK but seems not a good manner");
-        }
-    }
-
-    function get(key) {
-        if ( typeof this.storage[key] === "undefined" ) {
-            return null;
-        }
-        else {
-            return JSON.parse(this.storage.getItem(key));
-        }
-    }
-
-    function clear() {
-        this.storage.clear();
-    }
-
-    function size() {
-        return this.storage.length;
-    }
-
-    function keys() {
-        var result = [], k;
-
-        for ( k in this.storage ) {
-            result.push(k);
-        }
-
-        return result;
-    }
-
-    function values() {
-        var result = [], k;
-
-        for ( k in this.storage ) {
-            result.push(this.get(k));
-        }
-
-        return result;
-    }
-
-    RStorage.prototype.set = set;
-    RStorage.prototype.get = get;
-    RStorage.prototype.clear = clear;
-    RStorage.prototype.size = size;
-    RStorage.prototype.keys = keys;
-    RStorage.prototype.values = values;
-
-
-    function storage(name) {
-        return storage.sname || (storage.sname = new RStorage(window[name + "Storage"]));
-    }
-
-    r.storage = storage;
-
-})();

@@ -59,11 +59,14 @@
         }
     }
 
-    r.wrap = function wrap(ary) {
+    function wrap(ary) {
         ary.__proto__ = r.fn;
         return ary;
-    };
+    }
 
+    function nodeId(elem) {
+        return elem.__nid || (elem.__nid = r.__nid++);
+    }
 
     /**
      * Base class of HTMLElement Array collected by selector.
@@ -71,6 +74,21 @@
      * @class base class of HTMLElement Array collected by selector.
     */
     r.fn = {
+         /**
+         * forEach with auto-wrapping
+         * @name each
+         * @function
+         * @memberOf r.fn
+         * @param f {function}
+         * @example
+         * var values = r("select#fruits option").each(function($el) { $el.css("color", "red"); });
+        */
+        each: function(f) {
+            return this.forEach(function(el) {
+                f(r.wrap([el]));
+            });
+        },
+
         /**
          * <p> Get/Set innerHTML of elements </p>
          * <ul>
@@ -523,6 +541,14 @@
         }
     };
 
+    r.get = function(url, data, success, error) {
+        r.ajax(url, success, error, { data: data, method: "GET" });
+    };
+
+    r.post = function(url, data, success, error) {
+        r.ajax(url, success, error, { data: data, method: "POST" });
+    };
+
 
     // shorthand and fast query
 
@@ -566,9 +592,6 @@
         return wrap((context || doc).getElementsByTagName(name));
     };
 
-    r.nodeId = function nodeId(elem) {
-        return elem.__nid || (elem.__nid = r.__nid++);
-    };
 
     /**
      * check if given object is wrapped by r.fn
@@ -580,7 +603,12 @@
     */
     r.isR = function(obj) { return obj.__proto__ === r.fn; };
 
+    r.wrap = wrap;
+    r.nodeId = nodeId;
+    r.on = r.bind;
+    r.off = r.unbind;
     r.version = "0.4.0";
+
     global.r = r;
 })(
     this,
