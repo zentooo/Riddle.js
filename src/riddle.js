@@ -542,11 +542,11 @@
     };
 
     r.get = function(url, data, success, error) {
-        r.ajax(url, success, error, { data: data, method: "GET" });
+        return r.ajax(url, success, error, { data: data, method: "GET" });
     };
 
     r.post = function(url, data, success, error) {
-        r.ajax(url, success, error, { data: data, method: "POST" });
+        return r.ajax(url, success, error, { data: data, method: "POST" });
     };
 
 
